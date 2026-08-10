@@ -1,0 +1,49 @@
+---
+title: "Keeper and automation"
+description: "Bounded automated NAV, rebalance, and harvest operations."
+---
+
+The keeper is a bounded automation service. It holds Fordefi-scoped keys with hard policies that restrict what it can call, at what notional, and how often.
+
+## Keeper responsibilities
+
+- Submit NAV within bounds
+- Rebalance within cap and slippage envelopes
+- Harvest rewards to configured destinations
+- Watch for platform-service health, staleness, and threshold breaches
+
+## Bounds
+
+Direct curator / keeper (Fordefi):
+
+- Per-tx: ≤ \$50,000
+- Per-day: ≤ \$150,000
+- Target: registered adapters only
+- Simulation-required for every call
+- Deny-on-Hypernative-alert
+
+NAV signer key (Fordefi, dedicated):
+
+- `submitNAV` only
+- Bounded delta per step
+
+IPOR Alpha key (Fordefi, once role confirmed):
+
+- `FuseAction` to approved fuses only
+- Small notional cap per action
+- This-vault-only
+- Simulation-required
+- Mirrors on-chain AccessManager Alpha scope so a key compromise still cannot exceed IPOR's own limits
+
+## Shadow mode
+
+Every new automation ships in **shadow mode** first — the keeper builds and simulates every action it would take, records the audit log, and does not submit. Promotion out of shadow requires:
+
+- 3\+ clean cycles
+- Independent recompute delta \< 5 bps
+- Hypernative canary pause proven
+- Explicit go/no-go per [Ship plan — go/no-go](/ship-plan/go-no-go)
+
+## Isolation
+
+One connector or one strategy adapter failing must never halt others. Each runs in isolated worker processes with per-worker circuit breakers.

@@ -1,0 +1,21 @@
+---
+title: "Operations overview"
+description: "Day-to-day operational surface of Vault OS."
+---
+
+Every operational action passes:
+
+1. [Permission engine](/architecture/permission-engine) — must return `EXECUTABLE`
+2. Transaction build against the platform connector
+3. Simulation — must succeed
+4. Route to signer (Safe / Fordefi)
+5. Execute
+6. Reconcile
+
+No step is skipped, ever.
+
+## Section index
+
+<CardGroup cols={2}>
+           
+</CardGroup>

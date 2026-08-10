@@ -1,0 +1,50 @@
+---
+title: "Design principles"
+description: "Principles that govern the Vault OS control plane."
+---
+
+## 1. No platform is the operating system for the book
+
+Every platform (Upshift, Lagoon, IPOR, Superform) is treated as an interchangeable execution environment. Bizantine's monitoring, accounting, permissions, risk, transaction construction, automation, and audit layer sits above all of them.
+
+## 2. Unknown is blocked
+
+The permission engine returns `EXECUTABLE` only when every one of these resolves positively:
+
+- Role holder is read from chain and equals a Bizantine-controlled address
+- Fordefi policy permits the exact call
+- Platform whitelists target \+ selector \+ token
+- No blocking timelock or pause applies
+- NAV is fresh
+- Transaction simulates successfully
+- Independent unwind path exists
+
+Any `UNKNOWN` → `BLOCKED`.
+
+## 3. Never bypass native platform controls
+
+Every platform write must pass both the platform's native access control and a Fordefi policy encoding the same envelope. Connectors build calldata against public interfaces; they do not reach around a platform's own permissioning.
+
+## 4. Independent state reconstruction
+
+Bizantine reconstructs NAV, positions, and exposure from chain wherever technically possible. Loss of a platform's dashboard, API, or exporter must not degrade Bizantine's ability to value the book.
+
+## 5. Platform dependency is a first-class risk
+
+Platform-dependency risk is aggregated the same way protocol, asset, chain, and oracle exposure are. Any single non-Direct platform holding \> 25% of Bizantine NAV with routine ops, withdrawals, or NAV requiring that platform pages the on-call. Hard ceiling: ≤ 20% NAV per non-Direct platform until independent unwind is demonstrated.
+
+## 6. Wrappers never hide underlying exposure
+
+Morpho exposure reached via IPOR \+ via Direct \+ via a future Upshift or Lagoon vault aggregates to one combined Morpho number, one combined per-market number, one combined oracle-dependency number.
+
+## 7. Simulated is not executed. Deployed is not enabled.
+
+The documentation distinguishes:
+
+- Intended architecture
+- Implemented code
+- Tested code
+- Deployed code
+- Production-enabled code
+
+No integration is described as live until deployed contracts have been verified on chain and role holders confirmed.

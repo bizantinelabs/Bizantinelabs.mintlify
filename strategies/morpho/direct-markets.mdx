@@ -1,0 +1,56 @@
+---
+title: "Morpho — Direct markets"
+sidebarTitle: "Direct markets"
+description: "Morpho Blue direct market supply, withdraw, and monitoring."
+---
+
+<Info>
+  **Status:** `READ-ONLY` in v0.1. Direct-market write is a Phase 1.5 candidate.
+</Info>
+
+## Market identity
+
+A Morpho Blue market is uniquely identified by:
+
+- Loan token
+- Collateral token
+- Oracle
+- IRM (interest rate model)
+- LLTV (liquidation LTV)
+
+## Tracked state
+
+- Loan asset
+- Collateral asset
+- Oracle configuration and freshness
+- IRM
+- LLTV
+- Available liquidity
+- Utilization
+- Accrued interest
+- Bad debt
+
+## Read reconciliation
+
+For every Bizantine allocation into a Blue market (through any platform), the control plane reads:
+
+- Position asset amounts
+- Market utilization
+- Available liquidity vs Bizantine's redemption expectation
+- Oracle deviation vs alternative sources
+- Bad-debt signal (if any)
+
+## Controls (when write enabled)
+
+- Approved market IDs allowlist
+- Loan / collateral / oracle / IRM allowlists
+- Max LLTV
+- Max market / protocol / vault allocation
+- Max utilization
+- Minimum withdraw liquidity buffer
+- Oracle freshness \+ deviation
+- Bad-debt detection
+
+## Fork tests
+
+Direct supply → accrual → withdraw; high-utilization withdrawal; cap breach; oracle failure; bad-debt; market removal; emergency withdraw; unauthorized market (must revert).

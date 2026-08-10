@@ -1,0 +1,46 @@
+---
+title: "IPOR Fusion — Fuses"
+sidebarTitle: "Fuses"
+description: "Non-upgradable connectors into underlying protocols."
+---
+
+A **Fuse** is a stateless, non-upgradable contract that lets a Plasma Vault enter, exit, or (optionally) instant-withdraw from an underlying protocol.
+
+## FuseAction
+
+```solidity
+struct FuseAction {
+    address target;
+    bytes data;
+}
+```
+
+The Alpha role executes an array of `FuseAction` objects atomically. Each `target` must be a fuse currently registered on the vault by the Fuse Manager.
+
+## Balance Fuses
+
+Mandatory. A Balance Fuse tracks the vault's position value in an underlying protocol so that `totalAssets()` reflects real exposure. Without a matching Balance Fuse, the accounting for a protocol is undefined.
+
+## Known production fuses
+
+Morpho Blue, Euler V2, Aave, Gearbox, Compound, Fluid, and the generic `Erc4626SupplyFuse`. Deployment coverage varies by chain — verify per chain before use.
+
+## Verifying fuse coverage
+
+For any target chain and vault, verify from chain:
+
+- Which fuses are currently registered on the vault
+- Whether the required Balance Fuse is present
+- Whether instant-withdraw is available for the target position
+- Whether emergency-recall through Alpha / Guardian is supported
+
+## Missing fuses
+
+Where a required fuse does not exist on the target chain (likely Symbiotic today, and Morpho/Euler on Flare), evaluate:
+
+1. Build a custom Fuse
+2. Route through a Direct SleeveVault intermediary
+3. Use the generic ERC-4626 fuse (if the underlying exposes one)
+4. Run the strategy via Upshift or Lagoon instead
+
+Do **not** assume an IPOR integration exists merely because the protocol is EVM-compatible.

@@ -1,0 +1,31 @@
+---
+title: "Direct — Overview"
+sidebarTitle: "Overview"
+description: "Bizantine-owned SleeveVault stack — the fallback substrate and the v0.1 write path."
+---
+
+<Info>
+  **Status:** `PILOT`. Only guaranteed Level-3 write path in the 72-hour window. Every role is Bizantine-controlled by construction.
+</Info>
+
+## What it is
+
+A Direct Bizantine vault is a Bizantine-owned on-chain stack:
+
+- **SleeveVault** — shares vault (ERC-4626-derived)
+- **NAVSourcedSleeve** — accepts NAV updates from a NAVSource
+- **NAVSource** — the on-chain NAV feed submitted to by the NAV signer
+- **Strategy adapters** — e.g. `GenericERC4626Adapter` for Morpho Mode B
+- **Safe** owner (3-of-5) with timelock
+- **Fordefi** curator, keeper, and NAV signer keys
+- **Hypernative** guardian for auto-pause
+
+## Why it exists
+
+- **Fallback substrate.** Any position on any other platform can, in principle, be re-homed into a Direct SleeveVault (subject to platform cooperation for exit).
+- **Independent operability.** Bizantine controls every role by construction.
+- **First write path.** The v0.1 Level-3 write demonstration uses the Direct stack: passive Morpho supply via `GenericERC4626Adapter`.
+
+## Direct is not "one vault"
+
+A Direct vault is a template. Each deployment is a separate SleeveVault \+ NAVSourcedSleeve \+ NAVSource \+ adapter set, registered independently in the vault registry with its own capacity, allowlist, and adapter roster.

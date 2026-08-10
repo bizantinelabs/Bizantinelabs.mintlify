@@ -1,0 +1,31 @@
+---
+title: "Symbiotic — Vaults and delegation"
+sidebarTitle: "Vaults & delegation"
+description: "Delegator types, operators, and networks."
+---
+
+## Delegator types
+
+- **NetworkRestake** — restake to a set of networks
+- **FullRestake** — full restake
+- **OperatorSpecific** — delegation to a specific operator
+- **OperatorNetworkSpecific** — delegation to a specific operator on a specific network
+
+The delegator type determines Bizantine's exposure surface. Each choice implies different concentration risk and different slashing conditions.
+
+## Operators and networks
+
+- **Operators** run infrastructure for one or more networks
+- **Networks** define slashing conditions and reward payouts
+- Bizantine tracks concentration per operator, per network, and per (operator, network) pair
+
+## Approved set
+
+Any Symbiotic write is blocked until the risk committee approves an explicit allowed set of:
+
+- Vaults
+- Collateral
+- Networks
+- Operators
+
+Plus per-dimension concentration limits.

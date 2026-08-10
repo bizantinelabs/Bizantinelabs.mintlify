@@ -1,0 +1,24 @@
+---
+title: "Threat model"
+description: "What Vault OS defends against and where the boundary is."
+---
+
+## In scope
+
+- Adapter target exploit (protocol drain, oracle manipulation) — auto-pause \+ cross-platform propagation
+- Unauthorized signer action — dual-lock (native \+ Fordefi) prevents cross-envelope actions
+- Compromise of a single key — bounded envelopes and simulation limit blast radius
+- NAV manipulation — independent recompute \+ bounded steps \+ Hypernative pause on mismatch
+- Async double-spend attempts — request/claim state machine invariants
+- Platform service outage — read/monitor continues; write halts until independent path re-verified
+- Silent role reassignment — permission engine re-reads on every action; alert on capability transitions
+
+## Out of scope
+
+- Underlying protocol governance decisions (e.g. Morpho market removal by curator) — monitored; reaction is manual
+- Platform-level upgrade authority abuse where Bizantine has no on-chain role
+- Off-chain platform service takeover (Superform bundler, August policy engine) beyond emergency exit paths that require platform cooperation
+
+## Boundary
+
+Bizantine's protection ends where the platform's contractual and technical authority begins. Where those authorities cannot be verified on chain or cannot be exercised independently, the platform-dependency ceiling caps exposure.

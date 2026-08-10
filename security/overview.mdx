@@ -1,0 +1,20 @@
+---
+title: "Security overview"
+description: "Security posture of Vault OS."
+---
+
+## Trust model
+
+- **Contracts**: Direct contracts follow the v0 audited pattern. IPOR Plasma Vault core is immutable; fuses are non-upgradable. Platform contracts (Upshift, Lagoon, Superform) are subject to their own upgrade authority.
+- **Keys**: Safe 3-of-5 \+ timelock, Fordefi curator / keeper / NAV signer, Hypernative guardian sentinel.
+- **Roles on external platforms**: only Bizantine-controlled where on-chain-verified.
+
+## Layers
+
+<CardGroup cols={2}>
+        
+</CardGroup>
+
+## Responsible disclosure
+
+Security issues: `security@bizantinelabs.xyz` (PGP available on request). Public disclosure only after fix \+ notification.

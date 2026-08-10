@@ -1,0 +1,47 @@
+---
+title: "Incident response"
+description: "Runbooks, severity levels, and communications."
+---
+
+## Severity levels
+
+| Level | Trigger | Response |
+| --- | --- | --- |
+| SEV-1 | Funds at direct risk, exploit signal, PPS delta \> 75 bps | Auto-pause; on-call paged; incident room |
+| SEV-2 | Platform-dependency threshold breach, NAV recompute \> 5 bps | Alert; on-call paged; investigation |
+| SEV-3 | Oracle stale, keeper stale, service degradation | Alert; SRE investigates |
+| SEV-4 | Informational | Log |
+
+## Runbook categories
+
+Every registered vault ships with runbooks covering:
+
+- Platform-API outage
+- Keeper outage
+- Operator outage
+- NAV-service outage
+- Platform suspension
+- Contractual termination (Superform: no MSA — no cooperation assumed)
+- Compromised operator
+- Contract pause
+- Upgrade dispute
+- Strategy removal
+- Emergency withdrawal
+- Controlled migration
+- User communications
+
+<Note>
+  Runbook contents that materially increase attackability are internal-only. This page documents the public overview.
+</Note>
+
+## Communication policy
+
+- Public: status page updates, timeline post-mortem for SEV-1 / SEV-2
+- Partner-only: platform-specific incident details
+- Internal: signer identities, key procedures, vendor contact details
+
+## Coordination
+
+- On-call rotation covered internally
+- Incident-room checklist maintained internally
+- External counsel engaged for platform-cooperation disputes

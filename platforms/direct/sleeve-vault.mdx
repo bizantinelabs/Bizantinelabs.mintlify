@@ -1,0 +1,41 @@
+---
+title: "SleeveVault"
+sidebarTitle: "SleeveVault"
+description: "The Bizantine-owned shares vault."
+---
+
+A `SleeveVault` is a Bizantine-owned shares vault (ERC-4626-derived) that:
+
+- Accepts deposits (allowlisted initially)
+- Issues shares
+- Delegates asset deployment to registered strategy adapters
+- Settles NAV from a `NAVSourcedSleeve`
+- Enforces adapter caps, allowlists, and pause coverage
+
+## Roles
+
+| Role | Signer | Actions |
+| --- | --- | --- |
+| Owner | Safe 3-of-5 \+ timelock | Add / remove adapters, cap raises, fee changes |
+| Curator | Fordefi | Allocate / withdraw within caps |
+| Keeper | Fordefi (bounded) | Automated actions within envelope |
+| NAV signer | Fordefi (dedicated) | `submitNAV` only |
+| Guardian | Hypernative \+ Safe | Pause on threat signal |
+
+## Curator envelope (v0.1)
+
+- ≤ \$50k per transaction
+- ≤ \$150k per day
+- Target = registered adapters only
+- Simulation-required
+- Deny-on-Hypernative-alert
+
+See [Key management](/security/key-management) for the full policy set.
+
+## Depositor scope in v0.1
+
+Direct sleeves are initially **curator-only**. Third-party depositors require additional withdrawal and NAV-fairness review before enabling. See [Ship plan — scope](/ship-plan/scope).
+
+## Immutable core
+
+The SleeveVault core is not upgradable. Parameter changes, adapter registration, and fee changes flow through the Safe \+ timelock.

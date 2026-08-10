@@ -1,0 +1,46 @@
+---
+title: "Vault platforms"
+description: "The five vault execution environments Vault OS operates over."
+---
+
+Bizantine treats each platform as an interchangeable execution environment. Every platform's connector implements the same [`IVaultPlatformConnector`](/architecture/platform-connectors) interface.
+
+<CardGroup cols={2}>
+  <Card title="Upshift" icon="circle-nodes" href="/platforms/upshift/overview">
+    ERC-4626 vault \+ August subaccounts \+ policy engine. `READ-ONLY` scaffold.
+  </Card>
+
+  <Card title="Lagoon" icon="water" href="/platforms/lagoon/overview">
+    ERC-7540 \+ silo \+ Safe/Zodiac curator. `READ-ONLY` scaffold.
+  </Card>
+
+  <Card title="IPOR Fusion" icon="diamond" href="/platforms/ipor-fusion/overview">
+    Plasma Vault \+ Fuses \+ AccessManager RBAC. `SHADOW MODE` → `PILOT` on role confirmation.
+  </Card>
+
+  <Card title="Superform" icon="cubes" href="/platforms/superform/overview">
+    SuperVault triad \+ validator-signed PPS. `READ-ONLY`.
+  </Card>
+
+  <Card title="Direct" icon="vault" href="/platforms/direct/overview">
+    Bizantine SleeveVault \+ NAVSource. `PILOT` — only guaranteed Level-3 write in v0.1.
+  </Card>
+
+  <Card title="Control & continuity" icon="scale-balanced" href="/platforms/control-and-continuity">
+    Separates on-chain contract control from off-chain platform dependency, per platform.
+  </Card>
+</CardGroup>
+
+## Level model
+
+| Level | Meaning |
+| --- | --- |
+| **Level 1** | Read / reconcile |
+| **Level 2** | Build \+ simulate (never auto-submit) |
+| **Level 3** | Execute |
+
+See [Deployment status](/introduction/deployment-status) for the current Level of each platform.
+
+## Rule
+
+No connector is marked write-capable, and no role is asserted Bizantine-controlled, until the deployed contract and role assignment are read from chain. Missing address ⇒ connector ships read-only/scaffold with the exact blocker stated. `UNKNOWN` ⇒ `BLOCKED`.

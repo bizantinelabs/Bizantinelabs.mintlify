@@ -1,0 +1,26 @@
+---
+title: "Cross-chain architecture"
+description: "Multi-chain deployment posture and bridge handling."
+---
+
+## Chains in scope
+
+v0.1 window:
+
+- **Flare** — Direct SleeveVault stack
+- **Base** — IPOR Fusion Plasma Vault (read; write on Alpha-role confirmation)
+- **Ethereum** — Morpho Vault V2 target (subject to [ship-plan question 5](/ship-plan/open-questions))
+
+Phase 1.5\+: additional Base, Monad, and other approved chains as vaults are provided.
+
+## Bridge exposure
+
+Any cross-chain movement is treated as a `BRIDGE_IN_FLIGHT` position with its own valuation, timestamp, and risk aging. Bridges are never treated as instant. Aging beyond configured thresholds alerts.
+
+## Per-chain isolation
+
+A chain-level outage (RPC unavailable, sequencer halted) does not degrade other chains' operation. Each chain has its own worker, its own RPC pool, and its own health check.
+
+## Chain registry
+
+See [Chains](/reference/chains) for the current registry, per-chain deployment, and RPC dependencies.

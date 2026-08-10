@@ -1,0 +1,21 @@
+---
+title: "Vault registration"
+description: "Discover a vault, verify it, register it in the platform registry."
+---
+
+## Flow
+
+1. Operator submits `platformId` \+ `vaultAddress` to the operator CLI
+2. Connector `discoverVault(address)` returns a `DiscoveredVault`
+3. On-chain reads populate `NormalizedVaultState`, `PlatformCapabilities`, `PermissionSnapshot`, `DependencySnapshot`
+4. Continuity record generated — including emergency and migration plans
+5. Registry entry created; NAV feed established (or scaffolded)
+6. Initial classification: `READ-ONLY` → `SHADOW MODE` → `PILOT` → `LIVE`, promoted only as verifications complete
+
+## Missing address
+
+`NO_ADDRESS` state: connector emits a placeholder registry entry with the exact blocker ("no Bizantine vault on this platform"). Permission engine returns `BLOCKED` for every action.
+
+## Missing role holder
+
+Address present, role holder `UNKNOWN`: connector reads state and holds at `SHADOW MODE`. Promotion to `PILOT` requires reading the role holder from chain and confirming it equals a Bizantine-controlled address.

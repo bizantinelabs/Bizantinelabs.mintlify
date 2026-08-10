@@ -1,0 +1,27 @@
+---
+title: "Lagoon — Continuity"
+sidebarTitle: "Continuity"
+description: "What Bizantine can and cannot do without Lagoon services."
+---
+
+## Independence depends on curator
+
+| Property | If Bizantine = Curator | If Lagoon = Curator |
+| --- | --- | --- |
+| Read state | Yes | Yes |
+| Compute NAV | Depends on valuation-provider source | No |
+| Settle | Yes | No |
+| Process withdrawals | Yes | Operator-gated |
+| Pause | Yes | No |
+| Emergency exit | Yes | Curator-gated |
+| Migrate | Yes | Wind-down terms unclear |
+
+## Failure modes
+
+- Lagoon-run valuation provider unavailable → NAV blocked; Bizantine can replace only if it holds the authority to swap the provider
+- Curator Safe threshold not met → no settlement or emergency action
+- Silo state inconsistent with vault → halt and escalate
+
+## Migration
+
+If Bizantine holds Curator, a Direct migration is straightforward: settle final NAV, sweep silo, transfer assets to a Bizantine-owned address, and re-home into a Direct SleeveVault.

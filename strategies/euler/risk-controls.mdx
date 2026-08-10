@@ -1,0 +1,52 @@
+---
+title: "Euler — Risk controls"
+sidebarTitle: "Risk controls"
+description: "Enforcement, monitoring, and emergency deleverage."
+---
+
+## On-chain hard controls
+
+- Approved EVaults
+- Approved collateral and debt allowlists
+- Max LTV per position
+- Min HF
+- Max borrow
+- Max leverage (default: 1x)
+- Max utilization
+- Min withdraw liquidity
+- Approved EVC calls
+
+## Off-chain monitoring
+
+- Health factor per subaccount
+- Cross-account HF for netting logic
+- Oracle deviation across sources
+- Utilization
+- Available liquidity
+- EVault pause state
+
+## Emergency deleverage
+
+<Warning>
+  Not executed in v0.1. Documented design only.
+</Warning>
+
+Emergency deleverage path:
+
+1. Guardian pauses further borrowing
+2. Controlled unwind via EVC batching: repay debt using idle \+ collateral withdrawal
+3. Bounded slippage on any DEX legs
+4. Max-unwind-loss ceiling
+5. Position closed to available liquidity
+
+## Questions for the Euler team
+
+See [Ship plan — open questions](/ship-plan/open-questions).
+
+1. Recommended institutional integration contracts and interfaces?
+2. Which EVC calls to allowlist?
+3. Safest passive-supply mechanism?
+4. Immediately-withdrawable-liquidity calculation?
+5. Mandatory oracle and health checks?
+6. Recommended emergency-deleverage path?
+7. Supported deployments / vaults on target chains?

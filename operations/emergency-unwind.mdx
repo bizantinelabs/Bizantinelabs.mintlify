@@ -1,0 +1,31 @@
+---
+title: "Emergency unwind"
+description: "Sequence adapter emergencyExit calls to restore idle assets."
+---
+
+```mermaid
+flowchart TD
+    Trigger[Decision: unwind]
+    Trigger --> Pause[Vault paused]
+    Pause --> ListAdapters[List adapters ordered by liquidity]
+    ListAdapters --> Exit[emergencyExit per adapter]
+    Exit --> Reconcile[Reconcile net assets]
+    Reconcile --> Decision{All exited?}
+    Decision -- yes --> Idle[All assets idle in SleeveVault]
+    Decision -- no --> Escalate[Escalate: request redeem on illiquid position]
+```
+
+## Ordering
+
+1. Most liquid position first (idle, ERC-4626 with high available liquidity)
+2. Instant-withdraw fuses (IPOR)
+3. Async request/claim positions (Lagoon, Symbiotic) — initiate `requestWithdraw`
+4. Positions requiring platform cooperation last
+
+## Illiquid positions
+
+Symbiotic pending withdrawals are illiquid by design (7–14-day epoch). Emergency unwind for Symbiotic is limited to initiating the request; the position remains slashable until the epoch ends.
+
+## Rollback
+
+Rollback rehearsed with a small amount before scaling caps. See [Ship plan — go/no-go](/ship-plan/go-no-go).

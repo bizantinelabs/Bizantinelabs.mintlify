@@ -1,0 +1,35 @@
+---
+title: "Testing"
+description: "Invariant fuzzing, fork tests, and permission-engine tests."
+---
+
+## Invariant fuzzing
+
+Echidna and Medusa run the [invariant suite](/security/invariants) for at least 4 hours cumulative before any write is enabled.
+
+## Fork tests
+
+For every strategy adapter:
+
+- **Morpho** (Mode A): direct supply → accrual → withdraw; high-utilization withdrawal; cap breach; oracle failure; bad-debt; market removal; emergency withdraw; unauthorized market (must revert)
+- **Morpho** (Mode B): curated-vault allocation; queue reconfig; emergency withdraw
+- **Euler**: passive supply → accrue → withdraw; liquidity shortage; oracle deviation; unauthorized EVault (must revert); (borrow tests when enabled)
+- **Symbiotic** (read-only): deposit → delegation → rewards → withdraw-request → claim; epoch rollover; partial withdraw; concentration breach; slashing event; reward valuation failure
+
+## Connector tests
+
+For every connector:
+
+- Normalized model round-trips live state for each provided address
+- `NO_ADDRESS` scaffolds return the correct "blocked" reason, not a fake `EXECUTABLE`
+- Read paths are resilient to transient RPC errors
+
+## Permission-engine tests
+
+- Every capability resolves to a positive determination only under the full precondition set
+- Fuzz `UNKNOWN` inputs → must return `BLOCKED`
+- Fuzz platform allowlist mismatches → must return `BLOCKED`
+
+## Simulation
+
+Every execution path is simulated (eth\_call or Tenderly) as part of CI and as part of the runtime pipeline.

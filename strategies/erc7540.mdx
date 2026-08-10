@@ -1,0 +1,31 @@
+---
+title: "ERC-7540 asynchronous vaults"
+description: "Request / claim vaults — required for Lagoon and Symbiotic write paths."
+---
+
+<Info>
+  **Status:** `IN DEVELOPMENT`. Required for Lagoon write and any Symbiotic write.
+</Info>
+
+## Concept
+
+ERC-7540 extends ERC-4626 with **asynchronous** deposit / redeem. Users submit `requestDeposit` or `requestRedeem`, which are settled later by the vault operator. Actual share issuance or asset payout happens at `claim` time against the settled NAV.
+
+## Adapter shape
+
+The strategy adapter for an ERC-7540 vault must expose:
+
+- `deposit(assets, data)` — in practice a `requestDeposit`; returns 0 deployed until settled
+- `pendingAssets()` — the request queue balance
+- `liabilities()` — shares owed but not yet withdrawn (redeem side)
+- `withdraw(assets, data)` — `requestRedeem`
+- `harvest(data)` — claim settled positions
+- `emergencyExit(data)` — request maximum redeem; settlement remains platform-gated
+
+## Accounting
+
+`NormalizedPosition` for an ERC-7540 position always carries `pendingAssets` and `withdrawalDelaySeconds`. Immediately-claimable amounts are the only ones counted in `liquidAssets`.
+
+## Fork tests
+
+Request deposit → settle → claim; request redeem → settle → claim; partial claim; state-machine cannot double-spend shares.

@@ -1,0 +1,41 @@
+---
+title: "Risk framework"
+description: "How Vault OS aggregates and controls risk."
+---
+
+Risk is aggregated across every platform by:
+
+- Protocol
+- Chain
+- Underlying asset
+- Collateral asset
+- Debt asset
+- Oracle
+- Market
+- Vault
+- Operator
+- Network
+- Counterparty
+- Platform provider
+
+A wrapper never hides underlying exposure. See [Risk engine](/architecture/risk-engine).
+
+## Categories
+
+<CardGroup cols={2}>
+      
+</CardGroup>
+
+## Hard on-chain controls
+
+Per-adapter / protocol / asset caps, allowlists, slippage / deadline, NAV delta \+ staleness, min idle buffer, hardcoded selectors, pause.
+
+## Off-chain monitored
+
+Cross-platform aggregates, HF, CL ranges, oracle deviation, redemption-coverage ratio, bridge aging, platform service health, platform-dependency %.
+
+## Incident severity levels
+
+- **SEV-1** — funds at risk. Auto-pause on triggers; page immediately.
+- **SEV-2** — operational disruption. Alert; investigate.
+- **SEV-3** — informational anomaly. Log; review at next window.

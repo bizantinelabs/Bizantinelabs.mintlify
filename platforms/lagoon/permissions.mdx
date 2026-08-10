@@ -1,0 +1,24 @@
+---
+title: "Lagoon — Roles and permissions"
+sidebarTitle: "Roles & permissions"
+description: "Lagoon role model. Holders unverified until read from chain."
+---
+
+## Roles
+
+| Role | Where held | Typical implementation |
+| --- | --- | --- |
+| Curator | Safe \+ Zodiac Role Modifier or MPC | Verifies NAV, settles, manages strategy |
+| Valuation provider | Bizantine-run or Lagoon-run — verify | Proposes NAV |
+| Whitelist manager | Curator or delegate | Depositor allowlist |
+| Vault admin | Owner | Fees, configuration |
+
+## Bizantine role holdings
+
+<Warning>
+  No Bizantine Lagoon vault has been provided. Every role holder above is `NOT VERIFIED`. Curator Safe address, threshold, valuation-provider address, whitelist-manager, and silo address must be read from chain before any classification of independence.
+</Warning>
+
+## Zodiac scope
+
+The scope of the Zodiac Role Modifier granted to the Curator Safe determines which strategy actions Bizantine can execute autonomously. This must be inspected on chain per vault.

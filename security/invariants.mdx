@@ -1,0 +1,54 @@
+---
+title: "Invariants"
+description: "Solvency, conservation, and authorization invariants (v0 correction)."
+---
+
+<Warning>
+  The v0 invariant "price per share never decreases" is **removed**. A loss-bearing vault can legitimately lose value. The invariants below replace it.
+</Warning>
+
+## 1. No over-issuance
+
+> Σ claimable \+ outstanding share value ≤ NAV (within rounding).
+
+Shares issued may never exceed the vault's total net value.
+
+## 2. Asset conservation
+
+> After any settlement: `accounted_assets = idle + Σ adapter.totalAssets + receivables − liabilities`.
+
+## 3. Accounting identity
+
+> `shares_minted = assets_in ÷ PPS_settlement` (round down mint / up burn-cost).
+
+## 4. PPS moves only for cause
+
+PPS changes only via:
+
+- A bounded NAV report (`Δ ≤ maxDeltaBpsPerHour · Δt`)
+- Or a realized adapter P&L step
+
+Or via the 2-of-3 / `forceNAV` path (for legitimate loss steps).
+
+## 5. No unauthorized extraction
+
+No keeper / curator / Alpha role may produce a net transfer to any non-vault / non-registered-adapter address (especially any EOA).
+
+## 6. Allowlist holds
+
+- Non-allowlisted depositor `deposit` reverts
+- Adapter can only call hardcoded target \+ selectors
+
+## 7. Withdrawal correctness (async)
+
+- `claimable` never exceeds settled entitlement
+- Request → claim state machine cannot double-spend shares (applies to Symbiotic, IPOR scheduled, Lagoon)
+
+## 8. Pause safety
+
+- Paused state blocks new deposits and settlement
+- Already-settled claimables remain claimable
+
+## Enforcement
+
+Invariants are enforced by Echidna \+ Medusa fuzzing (≥ 4h cumulative before write). See [Testing](/security/testing).

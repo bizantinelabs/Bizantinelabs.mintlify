@@ -1,0 +1,33 @@
+---
+title: "Euler — Collateral and debt"
+sidebarTitle: "Collateral & debt"
+description: "Collateralized borrow and leveraged loop — disabled by default."
+---
+
+<Warning>
+  Collateralized borrow and leveraged loop are **disabled by default**. Enabling requires an explicit vault mandate, risk-committee approval, and a new adapter with hardcoded targets and selectors.
+</Warning>
+
+## Concepts
+
+- **Controller / collateral enablement** — accounts must enable a controller before borrowing and enable collaterals for that controller (EVC)
+- **Subaccounts** — up to 256 per address via address XOR; used to isolate risk of individual positions
+- **Batching** — multiple actions atomically via EVC
+- **Health factor** — must remain above `1`; below → liquidatable
+
+## Position shapes (when enabled)
+
+- `EULER_COLLATERAL` — collateral pledged
+- `EULER_DEBT` — outstanding borrow, tracked as a `liability`
+- `EULER_LEVERAGED_LOOP` — recursive supply/borrow with net exposure \> 1x
+
+## Controls
+
+- Approved collateral / debt / EVC calls allowlists
+- Max LTV, min HF, max borrow, max leverage
+- Oracle deviation, max slippage, max unwind loss
+- Emergency deleverage path (designed, not enabled v0.1)
+
+## Fork tests
+
+Supply collateral → borrow → repay → withdraw; loop → partial unwind → full unwind; HF breach; emergency deleverage; unauthorized collateral / debt (must revert).

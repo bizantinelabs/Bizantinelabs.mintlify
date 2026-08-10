@@ -1,0 +1,32 @@
+---
+title: "Platform control and continuity"
+description: "Separating on-chain contract control from off-chain platform dependency, per platform."
+---
+
+For every platform, this page separates:
+
+- On-chain contract control
+- Wallet and signer control
+- Off-chain operator dependency
+- Platform API dependency
+- Emergency authority
+- Upgrade authority
+- Migration requirements
+
+## Summary
+
+|  | Direct | IPOR | Upshift | Lagoon | Superform |
+| --- | --- | --- | --- | --- | --- |
+| On-chain contract control | Bizantine | Owner immutable; Atomist/Alpha/Fuse Manager/Guardian per role | Owner multisig (co-signed) | Curator (Safe/Zodiac) | Global root (Superform gov), strategy root (Bizantine) |
+| Signer control | Safe \+ Fordefi | Fordefi \+ Safe | Multisig co-signer | Safe \+ Zodiac | Fordefi \+ Merkle |
+| Off-chain operator dependency | None | Low (SDK/MCP; direct RPC works) | High (August policy engine) | Medium (valuation provider) | High (validators, bundler) |
+| Platform API dependency | None | Optional | Likely required | Depends on valuation source | Required |
+| Emergency authority | Bizantine | Guardian / Alpha recall | Owner multisig (co-signed) | Curator | Guardian |
+| Upgrade authority | None (immutable core) | Diamond (Owner immutable) | Platform | Platform | Non-upgradeable core |
+| Migration | Bizantine | Bizantine (once Atomist/Alpha confirmed) | Co-signed | Bizantine if curator | Wind-down subject to platform |
+
+See also: [Dependency matrix](/reference/dependency-matrix), [Continuity matrix](/reference/continuity-matrix).
+
+## Legal caveat
+
+Any legal interpretation on this page and its subpages requires counsel review. Non-public contract terms are not published here — they are referenced only in the internal operations set.

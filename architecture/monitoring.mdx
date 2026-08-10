@@ -1,0 +1,48 @@
+---
+title: "Monitoring and incident response"
+description: "Independent recompute, pause automation, and alerting."
+---
+
+## Independent monitor
+
+A separate process reads chain state, recomputes NAV independently of the keeper, and compares against the submitted NAV. Delta \> 5 bps fires an alert. Delta \> 75 bps auto-pauses via Hypernative.
+
+## Metrics (Grafana)
+
+- Price per share (per vault)
+- NAV staleness
+- Per-platform exposure and dependency %
+- Permission `BLOCK` counts per capability
+- Adapter utilization
+- Redemption coverage ratio
+- Bridge aging (where applicable)
+
+## Hypernative auto-pause rules
+
+Auto-pause triggers via the sentinel role:
+
+- PPS delta beyond bound / NAV recompute mismatch \> 75 bps
+- Unexpected outbound transfer or unauthorized approval
+- Adapter-target exploit signal
+- Cross-platform: same underlying protocol flagged anywhere → pause every Bizantine vault exposed to it
+
+## Alerts (no auto-pause)
+
+- Oracle cross-source deviation or staleness
+- HF, CL range, buffer breach
+- Keeper staleness
+- Platform service health degraded
+- Platform-dependency % over threshold
+- Any capability transitions to `UNAVAILABLE` (role changed under us, platform paused, API down)
+
+## Isolation guarantee
+
+<Note>
+  A failure in one connector must never stop monitoring or operation of other vaults. Connectors are isolated processes.
+</Note>
+
+## Runbooks
+
+Every registered vault ships with a runbook covering: platform-API outage, keeper outage, operator outage, NAV-service outage, platform suspension, contractual termination, compromised operator, contract pause, upgrade dispute, strategy removal, emergency withdrawal, controlled migration, user communications.
+
+See [Incident response](/security/incident-response).

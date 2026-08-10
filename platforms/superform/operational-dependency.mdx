@@ -1,0 +1,36 @@
+---
+title: "Superform — Operational dependency"
+sidebarTitle: "Operational dependency"
+description: "On-chain vs off-chain control. Technical independence is the only protection."
+---
+
+<Warning>
+  **No Superform MSA is assumed to govern the relationship.** There is no negotiated continuity, transition-assistance, wind-down, data-export, or non-interference obligation owed to Bizantine. Any Superform-hosted service (SuperformOS / app / validators / bundler) can be changed, throttled, or cut off at will with no contractual notice or recourse.
+</Warning>
+
+## Operational posture
+
+Because Bizantine holds no negotiated rights, the architecture assumes the maximally adverse off-chain scenario and is designed to be technically immune to it. Vault OS is built and verified as if Superform can, with zero notice and zero recourse:
+
+- Suspend credentials / permissions
+- Disable workflows / operational access (SuperformOS, app, bundler)
+- Change or discontinue services
+- Impose emergency restrictions
+- Stop supporting any wind-down
+
+## Required verifications (in-window, from chain and code)
+
+1. **On-chain independence of Bizantine SuperVault positions** — confirm which on-chain role (if any) Superform holds on any Bizantine SuperVault; confirm funds can be exited to base asset via a Bizantine-controlled path (strategy-root emergency-withdraw hook, or preferably migration to a [Direct SleeveVault](/platforms/direct/sleeve-vault)) without any Superform off-chain service.
+2. **No hard off-chain dependency on the redemption / NAV path** for anything Bizantine markets to LPs — validated by the [Dependency matrix](/reference/dependency-matrix).
+3. **Data self-sufficiency** — the control plane reconstructs NAV, positions, and history from chain (see [NAV & accounting](/architecture/nav-accounting)), so loss of Superform's dashboard or exports costs nothing operationally.
+4. **IP compliance without an MSA** — connector built only from public standards, public interfaces, documented APIs, on-chain data, and Bizantine code. No reverse-engineering or derivative works of non-open-source Superform tech.
+
+## Counsel note (informational, not blocking)
+
+Operating hosted infrastructure with no signed MSA is itself a business risk. If Bizantine intends to keep meaningful TVL flowing through Superform distribution, counsel may want to put an MSA in place that secures: independent emergency unwind, data export, continued read access, transition assistance, minimum wind-down period, operator continuity, role-transfer, asset-migration cooperation, NAV records, outage procedures, non-interference with Bizantine-owned contracts, and an explicit on-chain-vs-off-chain powers schedule.
+
+Until such an agreement exists, the platform-dependency ceiling on Superform is hard-capped low (≤ 20% NAV, only for positions whose emergency exit is on-chain-verified independent). See [Risk limits](/risk/limits).
+
+<Note>
+  Any legal interpretation on this page requires counsel review before being relied upon.
+</Note>

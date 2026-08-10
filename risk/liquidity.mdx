@@ -1,0 +1,35 @@
+---
+title: "Liquidity risk"
+description: "Liquid, pending, and claimable accounting."
+---
+
+Every position separates:
+
+- `liquidAssets` — immediately withdrawable
+- `pendingAssets` — in a request / claim queue or epoch
+- `liabilities` — debt or outstanding obligations
+- `claimable` — subset of pending currently claimable
+
+## Rules
+
+- Never model an async or epoch-locked position as continuously liquid
+- Symbiotic pending withdrawals are illiquid until the epoch ends, even though a request has been made
+- Instant-withdraw fuses (IPOR) count as liquid only up to the actual on-chain available liquidity in the underlying market
+
+## Redemption-coverage ratio
+
+```text
+RCR = (liquidAssets + claimable) / outstanding_redemption_liability
+```
+
+Alert on RCR below configured threshold. Halt new redemption acceptance below hard floor.
+
+## Withdrawal-delay-weighted liquidity
+
+For forecasting, positions are weighted by `withdrawalDelaySeconds`:
+
+```text
+L_eff = sum_i liquidAssets_i + sum_j pendingAssets_j * exp(-lambda * delay_j)
+```
+
+The control plane uses `L_eff` to size acceptable redemption commitments.

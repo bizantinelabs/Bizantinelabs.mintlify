@@ -1,0 +1,62 @@
+---
+title: "Data model"
+description: "Normalized vaults, positions, and audit records."
+---
+
+Every connector emits data conforming to the normalized model. The control plane and every engine consume only normalized types.
+
+## NormalizedVaultState
+
+Core fields:
+
+- `platformId`, `vaultAddress`, `chainId`
+- `asset` (base asset address \+ decimals)
+- `totalAssets`, `totalSupply`, `pps`
+- `idle`, `deployed`, `pending`, `claimable`, `receivables`, `liabilities`
+- `paused`, `pauseReasons`
+- `nav`: `{ value, timestamp, methodologyVersion, source }`
+- `roles`: mapping of role name → on-chain holder
+- `dependencies`: `DependencySnapshot`
+- `capabilities`: `PlatformCapabilities` (see [Permission matrix](/reference/permission-matrix))
+
+## NormalizedPosition types
+
+```text
+CASH
+ERC4626
+ERC7540
+MORPHO_MARKET_SUPPLY
+MORPHO_VAULT
+EULER_SUPPLY
+EULER_COLLATERAL
+EULER_DEBT
+EULER_LEVERAGED_LOOP
+SYMBIOTIC_RESTAKING
+SYMBIOTIC_PENDING_WITHDRAWAL
+SYMBIOTIC_REWARD
+LENDING
+BORROWING
+LP
+CONCENTRATED_LIQUIDITY
+STAKING
+FIXED_YIELD
+REWARD
+OTC
+BRIDGE_IN_FLIGHT
+```
+
+Every position carries:
+
+- `gross`, `liability`, `net`
+- `liquid`, `locked`, `pending`, `claimable`
+- `valuationSource`, `valuationTimestamp`, `valuationConfidence`
+- `withdrawalDelaySeconds`
+- Where applicable: `leverageRatio`, `healthFactor`, `liquidationThreshold`, `protocolMetadata`
+
+<Warning>
+  Liabilities and risk dimensions are mandatory. A debt or pending-withdrawal position without its liability field is a rejected record.
+</Warning>
+
+## Audit log
+
+Postgres append-only. Every proposed action, permission determination, simulation result, and submitted transaction is recorded. See [Keeper service](/developers/keeper-service).

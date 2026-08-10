@@ -1,0 +1,22 @@
+---
+title: "Shadow mode"
+description: "Level-2 build + simulate without submitting."
+---
+
+Shadow mode is the default state for any platform write path where preconditions are not yet met. It runs the full pipeline **except** submission:
+
+1. Permission engine returns `SIMULATABLE` (all checks except the terminal one)
+2. `buildAction` produces calldata
+3. `simulateAction` runs against fork or Tenderly
+4. Result recorded to the audit log
+5. **No submission**
+
+## Uses
+
+- Rehearsing an execution path before role holders are confirmed
+- Continuous testing that a connector still builds valid calldata under live state
+- Detecting silent breakage (a platform upgrade that changes calldata shape)
+
+## Promotion
+
+Shadow → execute promotion requires only that the last permission-engine check passes. No code change.

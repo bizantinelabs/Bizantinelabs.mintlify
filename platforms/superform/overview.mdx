@@ -1,0 +1,29 @@
+---
+title: "Superform — Overview"
+sidebarTitle: "Overview"
+description: "SuperVault triad + validator-signed PPS. Read-only in v0.1."
+---
+
+<Info>
+  **Status:** `READ-ONLY`. Write is out of the 72-hour window on on-chain-role-verification grounds. No MSA is assumed in place — see [Operational dependency](/platforms/superform/operational-dependency).
+</Info>
+
+## Architecture
+
+SuperVault triad (ERC-7540) with:
+
+- **Double-Merkle hooks**
+  - Global root — Superform governance
+  - Strategy root — Bizantine as strategist
+- **Guardian veto**
+- **7-day timelocks**
+- **Validator-signed PPS** (`ECDSAPPSOracle`, ≥ 2/3 weighted stake) via `SuperVaultAggregator`
+
+## Role of Superform in v0.1
+
+Optional distribution connector. Bizantine reads state and reconciles exposure, but does **not** treat Superform as an execution path in the window. Superform's validator-PPS and global-root remain the reasons its own SuperVault shell can be frozen by Superform — which is precisely why [Direct \+ sleeves](/platforms/direct/overview) is the substrate.
+
+## Sources
+
+- docs.superform.xyz
+- v2-core, v2-periphery

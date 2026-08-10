@@ -1,0 +1,38 @@
+---
+title: "Key management"
+description: "Safe, Fordefi, and NAV signer envelopes."
+---
+
+## Safe (Bizantine Owner)
+
+- 3-of-5 multisig
+- Behind a timelock (`7d` for adapter add, `3d` for cap raise, per configuration)
+- Owner actions: adapter add / remove, role changes, param / fee changes, oracle changes
+
+## Fordefi (curator, keeper)
+
+- Bounded policy per key
+- Direct curator envelope: ≤ $$50k / tx, ≤ $$150k / day, target = registered adapters only, simulation-required, deny-on-Hypernative-alert
+- Keeper key: `submitNAV` only, bounded; and Morpho-adapter `deposit` / `withdraw` within caps
+
+## NAV signer
+
+- Dedicated Fordefi key
+- `submitNAV` only, bounded to NAVSource per-vault corridor
+- Cannot invoke any other function
+
+## IPOR Alpha (when confirmed)
+
+- Fordefi key
+- Policy encodes on-chain AccessManager Alpha scope
+- `FuseAction` targets restricted to approved fuses only
+- Notional cap: low four figures per action (v0.1)
+- This-vault-only, simulation-required
+
+## Dual-lock principle
+
+Every platform write must pass **both** the platform's native access control **and** a Fordefi policy encoding the same envelope. The control plane never bypasses native controls.
+
+## Fordefi policy secrets
+
+Fordefi policy internals beyond the published envelopes are not published here. See [Security disclaimer](/introduction/security-disclaimer).

@@ -1,0 +1,39 @@
+---
+title: "Deployment status"
+description: "Current status of every platform, strategy, and capability."
+---
+
+Status labels used throughout this documentation:
+
+| Label | Meaning |
+| --- | --- |
+| `LIVE` | Deployed, roles verified on chain, production-enabled |
+| `PILOT` | Deployed, small caps, heightened watch |
+| `TESTNET` | Deployed to a testnet only |
+| `READ-ONLY` | Level-1: state read and reconciled, no write |
+| `SHADOW MODE` | Level-2: transaction built and simulated, never submitted |
+| `IN DEVELOPMENT` | Code being written |
+| `PLANNED` | Not yet started |
+| `REQUIRES PLATFORM APPROVAL` | Blocked on external role, whitelist, or contract assignment |
+| `NOT VERIFIED` | Address or role holder has not been read from chain |
+| `DEPRECATED` | Removed or superseded |
+
+## v0.1 window snapshot
+
+| Integration | Status | Notes |
+| --- | --- | --- |
+| Direct Bizantine SleeveVault | `PILOT` | Only guaranteed Level-3 write path in the 72-hour window |
+| Morpho passive supply (curated vault via `GenericERC4626Adapter`) | `PILOT` | First Direct write; Mode B (ERC-4626) |
+| IPOR Fusion (Base Plasma Vault) | `SHADOW MODE` | Promotes to `PILOT` on-role confirmation of Alpha holder |
+| Upshift | `READ-ONLY` scaffold | `NO_ADDRESS` — awaiting Bizantine vault address |
+| Lagoon | `READ-ONLY` scaffold | `NO_ADDRESS` — awaiting Bizantine vault address |
+| Superform | `READ-ONLY` | On-chain-role verification pending; write out of window |
+| Euler passive supply | `SHADOW MODE` | Borrow disabled by default |
+| Symbiotic | `READ-ONLY` | No write in v0.1 |
+| Enosys, SparkDEX, Spectra, Gamma, Gearbox | `PLANNED` | Adapter scope retained; not v0.1 |
+| ERC-4626 generic adapter | `LIVE` | Used by Morpho Mode B |
+| ERC-7540 support | `IN DEVELOPMENT` | Required for Lagoon and Symbiotic write paths |
+
+<Warning>
+  Addresses and role holders for platform vaults are unverified until read from chain. Missing address ⇒ connector ships read-only or scaffold with the exact blocker stated. See [Continuity matrix](/reference/continuity-matrix).
+</Warning>

@@ -1,0 +1,26 @@
+---
+title: "Reward harvesting"
+description: "Adapter harvest paths, reward valuation, and stale-reward handling."
+---
+
+## Harvest
+
+Adapters expose `harvest(data)` → `harvestedValue`. Rewards are pulled to a Bizantine-controlled sink (SleeveVault or a dedicated `RewardsManager`).
+
+## Reward valuation
+
+Rewards may be non-collateral tokens with their own oracle path. Every reward position carries:
+
+- `valuation.source`
+- `valuation.timestamp`
+- `valuation.confidence`
+
+Stale-reward valuation triggers an alert and excludes the reward from `netAssets` until refreshed.
+
+## Permission
+
+Harvest passes through the permission engine like any other adapter call. Fordefi policies restrict harvest destinations to registered sinks.
+
+## IPOR RewardsManager
+
+Harvests via IPOR's `RewardsManager` fuse. Reward types and destinations are subject to the same allowlist as any other fuse action.

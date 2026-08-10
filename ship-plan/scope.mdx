@@ -1,0 +1,48 @@
+---
+title: "Scope"
+description: "Level 1 / 2 / 3 breakdown for the 72-hour window."
+---
+
+## Level model
+
+| Level | Meaning |
+| --- | --- |
+| **1** | Read / reconcile |
+| **2** | Build \+ simulate (never auto-submit) |
+| **3** | Execute |
+
+## Ships to Level 3
+
+- **Direct connector \+ passive Morpho supply** via `GenericERC4626Adapter` on the v0 SleeveVault stack. Guaranteed Level-3 in-window.
+- **IPOR Fusion write path** — promotes to Level 3 the instant the Base Plasma Vault's Alpha holder is confirmed Fordefi-controlled. Executes exactly one small approved action: `allocate idle → approved ERC4626 or Morpho fuse → instant-withdraw`. If Alpha confirmation does not arrive in-window, IPOR stays Level 2.
+
+## Ships to Level 2
+
+- Upshift (once address provided)
+- Lagoon (once address provided)
+- Superform (write out on on-chain-role grounds)
+- Euler passive supply strategy actions
+- Symbiotic strategy actions
+
+## Ships to Level 1
+
+- All five platforms
+- Euler / Morpho / Symbiotic position discovery for provided addresses
+- Unified NAV \+ cross-platform exposure reconciliation
+- Permission \+ dependency \+ continuity snapshots
+- Platform-dependency dashboard \+ machine-readable report
+- Alerting on capability transitions to `UNAVAILABLE`
+
+## Blockers stated in-product
+
+- Upshift, Lagoon: read-only / scaffold until an address is provided
+- IPOR: Level-2 shadow, auto-promoting to Level-3 on Alpha-role confirmation
+- Euler, Symbiotic: read \+ Level-2 shadow (passive Morpho is the safer single v0 write)
+- Superform write: out on on-chain-role grounds (no MSA to wait on)
+
+## Capital caps
+
+- Per Direct vault: \$50k
+- Total Direct pre-external-review: \$150k
+- IPOR v0.1 write action: low four figures notional per action
+- Non-Direct platform per-platform cap: ≤ 20% NAV

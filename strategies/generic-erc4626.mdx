@@ -1,0 +1,37 @@
+---
+title: "Generic ERC-4626 adapter"
+description: "Deterministic convertToAssets, reliable exit. Used by Morpho Mode B."
+---
+
+<Info>
+  **Status:** `LIVE`. Used by [Morpho Mode B](/strategies/morpho/curated-vaults) in v0.1.
+</Info>
+
+## Purpose
+
+`GenericERC4626Adapter` operates any ERC-4626 vault as an underlying strategy position. It:
+
+- Deposits assets into a hardcoded target vault
+- Values position via `convertToAssets(shares)`
+- Withdraws via standard ERC-4626 `withdraw` / `redeem`
+- Exposes `emergencyExit` that attempts full withdraw within available liquidity
+
+## Constraints
+
+- Target vault address is **hardcoded** at deployment; not configurable
+- Selector targets restricted to `deposit`, `withdraw`, `redeem`, view methods
+- No approval to any address other than the target vault
+- No arbitrary `call` surface
+
+## Not suitable for
+
+- Async (ERC-7540) vaults — use ERC-7540 adapter
+- Vaults with custom fee-on-transfer behavior on the underlying asset
+- Vaults whose `convertToAssets` is manipulable (verify per target)
+
+## Verification before use
+
+- Read target vault's role holders, timelocks, and upgrade authority
+- Confirm `convertToAssets` matches independent balance-based valuation
+- Confirm `withdraw` behavior under high utilization
+- Confirm no reentrancy surface exposed to depositors

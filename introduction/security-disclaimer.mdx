@@ -1,0 +1,43 @@
+---
+title: "Security and risk disclaimer"
+description: "What this documentation is and is not."
+---
+
+<Warning>
+  Vault OS v0.1 has not completed a full external audit. Capital caps apply until external review is complete. See [Ship plan — go/no-go](/ship-plan/go-no-go).
+</Warning>
+
+## Scope
+
+This documentation describes Bizantine's control plane, its integrations, and the operational, risk, and security posture for capital deployed through it. It is intended for:
+
+- Bizantine engineers, operators, and risk managers
+- Institutional allocators evaluating the platform
+- Security reviewers and auditors
+- Protocol and platform partners
+
+## What is not published here
+
+- Private keys, session tokens, or API credentials
+- Fordefi policy internals beyond published envelopes
+- Signer identities beyond approved role descriptions
+- Non-public contract terms
+- Unannounced deployment addresses
+- Private infrastructure hostnames
+- Vendor contact details
+
+Sensitive operational content lives in an internal-only documentation set and is referenced here only by role description or configuration variable name.
+
+## Language
+
+Terms used throughout this documentation:
+
+- "Designed to" — intended behavior, not necessarily deployed
+- "Currently supports" — implemented and tested
+- "Verified against" — matched to deployed on-chain state
+- "Requires" — external dependency that must be resolved before use
+- "Not yet enabled" — code exists but is gated off
+- "Read-only" — no execution path
+- "Pending external review" — awaiting audit or platform confirmation
+
+The documentation avoids promotional claims such as "fully decentralized," "trustless," "risk-free," "audited," or "battle-tested" unless the specific claim is scoped and supported.

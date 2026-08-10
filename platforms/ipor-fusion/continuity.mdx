@@ -1,0 +1,30 @@
+---
+title: "IPOR Fusion — Continuity"
+sidebarTitle: "Continuity"
+description: "What Bizantine can do without IPOR off-chain services."
+---
+
+## Independence matrix
+
+| Property | Independent of IPOR off-chain? |
+| --- | --- |
+| Read state | Yes (RPC) |
+| Compute NAV | Yes (Balance Fuses on-chain) |
+| Routine strategy actions | Yes — Alpha executes on-chain; the IPOR UI/SDK is optional |
+| Process withdrawals | Yes — on-chain WithdrawManager |
+| Pause | Yes (Guardian) |
+| Emergency exit | Yes (Guardian / Alpha recall) |
+| Replace operator | Atomist reassigns Alpha |
+| Migrate | Yes (Atomist / unwind) |
+
+The Plasma Vault \+ Fuses design is one of the more independence-friendly platforms: NAV and withdrawal machinery live on chain, and Alpha execution can be performed by any client that can sign and submit `FuseAction` calls — the IPOR SDK is a convenience, not a hard dependency.
+
+## Failure modes
+
+- IPOR SDK / MCP server unavailable → Bizantine can execute Alpha calls with a Fordefi-signed direct RPC submission using the on-chain contract ABI
+- Fuse Manager unresponsive → no new fuses added; existing fuses remain executable
+- Owner role misuse → Owner is immutable; audit before onboarding a vault where Owner is not Bizantine or a trusted counterparty
+
+## Migration
+
+Atomist (Bizantine, once verified) can unwind positions through instant-withdraw or scheduled withdraw, close positions, and transfer assets. Migration to a Direct SleeveVault requires no IPOR cooperation once Atomist / Alpha are Bizantine-controlled.

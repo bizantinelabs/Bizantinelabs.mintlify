@@ -1,0 +1,34 @@
+---
+title: "Additional integrations"
+description: "Enosys, SparkDEX, Spectra, Gamma, Gearbox, and rewards / harvest modules."
+---
+
+All integrations listed below are `PLANNED` unless otherwise noted. Adapter scope is retained; none is v0.1 scope.
+
+## Enosys
+
+`PLANNED`. Verify canonical contracts, oracle configuration, liquid-vs-nominal calc, emergency exit.
+
+## SparkDEX
+
+`PLANNED`. LP position accounting per range; concentrated-liquidity risk dimensions applied.
+
+## Spectra
+
+`PLANNED`. Fixed-yield exposure requires `FIXED_YIELD` position type and separate maturity/liquidity handling.
+
+## Gamma
+
+`PLANNED`. Concentrated-liquidity manager — range and rebalance tracking required.
+
+## Gearbox
+
+`PLANNED`. Leverage-adjacent; borrow disabled by default (see [Euler risk controls](/strategies/euler/risk-controls) for the same posture).
+
+## Rewards and harvest modules
+
+`PLANNED`. Rewards positions carry `valuation.source` \+ `confidence`; stale-reward valuation triggers alert. Harvest actions are subject to the same permission engine as any other adapter call.
+
+## Rule
+
+No protocol-specific behavior is invented. Every integration verifies canonical interfaces from official sources and confirms deployment addresses per chain before Level-1 read is enabled.

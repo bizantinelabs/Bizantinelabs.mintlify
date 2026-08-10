@@ -1,0 +1,71 @@
+---
+title: "Hour-by-hour schedule"
+description: "72h execution timeline with sessions and gates."
+---
+
+## Day 1 — Freeze interfaces, build read layer, contracts
+
+<Steps>
+  <Step title="H0–2 (architect) — freeze interfaces">
+    Commit monorepo scaffold; freeze `IStrategyAdapter` (Sol), `IVaultPlatformConnector` \+ `NormalizedVaultState` \+ `NormalizedPosition` \+ `PlatformCapabilities` / `PermissionSnapshot` / `DependencySnapshot` (TS), and the risk schema. All sessions build against this.
+  </Step>
+  <Step title="Session A — contracts">
+    Carry v0 SleeveVault / NAVSourcedSleeve / NAVSource / GenericERC4626Adapter forward; rename interface; wire Morpho curated-vault target into GenericERC4626Adapter; corrected invariant suite. Fork tests on Flare \+ Ethereum.
+  </Step>
+  <Step title="Session B — connectors (read)">
+    Platform registry \+ normalized model; Direct, IPOR, Superform read connectors first (addresses known); Upshift / Lagoon scaffold (`NO_ADDRESS` state). IPOR read via `ipor-fusion` SDK/CLI.
+  </Step>
+  <Step title="Sessions E / F / G — Morpho / Euler / Symbiotic reads">
+    Position discovery \+ normalized accounting per protocol. Start after H2 freeze.
+  </Step>
+  <Step title="Session C — keeper / action">
+    NAV engine wiring; permission engine skeleton (`Unknown = Block`); transaction builder \+ simulator; audit log. Shadow only.
+  </Step>
+  <Step title="EOD gate">
+    All reads return live normalized state for provided addresses; contracts green; permission engine returns `BLOCKED` on anything unverified.
+  </Step>
+</Steps>
+
+## Day 2 — Permission / risk, simulate, deploy-dark
+
+<Steps>
+  <Step title="AM — architect review">
+    Contracts line-by-line (reentrancy, approvals, decimals, rounding, pause coverage, corrected invariants). Permission-engine review: every capability must resolve role holder \+ threshold \+ Fordefi policy \+ platform allowlist / selector \+ timelock \+ pause \+ NAV freshness \+ simulability \+ unwind-availability.
+  </Step>
+  <Step title="Cross-platform risk">
+    Morpho / Euler / Symbiotic exposure summed across Direct \+ IPOR \+ any provided Upshift / Lagoon; Level-2 build\+simulate for the IPOR write action and all shadow paths; continuity records generated per vault.
+  </Step>
+  <Step title="PM — deploy-dark">
+    On Flare (paused, caps 0): NAVSource → GenericERC4626Adapter(Morpho target) → SleeveVault; verify; transfer ownership to Safe \+ timelock.
+  </Step>
+  <Step title="Session D — infra">
+    Dockerize control-plane-service \+ keeper \+ monitor; Postgres audit; Prometheus / Grafana (PPS, staleness, per-platform exposure, dependency %, permission-BLOCK counts); Telegram wiring.
+  </Step>
+  <Step title="Evening — Safe window #1">
+    Accept ownership; set roles / params (v0 values \+ platform-dependency alert thresholds); Fordefi policies (keeper key: `submitNAV` \+ Morpho-adapter deposit/withdraw within caps; IPOR write: Atomist/Alpha-scoped `FuseAction` to approved fuse only, ≤ small notional, simulation-required); Hypernative canary pause test on Flare sleeve — must fire.
+  </Step>
+  <Step title="EOD gate">
+    Contracts live-dark & owned by Safe; permission engine BLOCKS all unverified platform writes; IPOR write built \+ simulated (not sent); Hypernative pause proven.
+  </Step>
+</Steps>
+
+## Day 3 — Two write paths live, everything else read / shadow
+
+<Steps>
+  <Step title="AM — keeper out of shadow on Direct">
+    First real NAV accepted, independent recompute \< 5 bps, 3 clean cycles; rehearse rollback with \$1k.
+  </Step>
+  <Step title="AM — Safe window #2">
+    Unpause Direct sleeve; cap $$50k; curator allocates $$10k to Morpho via adapter; round-trip reconciles to the wei in Grafana \+ Telegram `/vault`.
+  </Step>
+  <Step title="Midday — IPOR write (only if Alpha confirmed)">
+    Permission engine returns `EXECUTABLE` for the single approved IPOR action (verified Atomist / Alpha on Base) → build → simulate → route to Fordefi / Safe → execute one small allocate \+ instant-withdraw → reconcile. If Alpha role not confirmed → do not execute; Direct alone carries the write demonstration.
+  </Step>
+  <Step title="PM">
+    Scale Direct to cap; 24h heightened watch. Publish platform-dependency \+ continuity report; publish NAV methodology; book external review.
+  </Step>
+</Steps>
+
+## Parallelism
+
+A, B, E, F, G run in parallel from H2 (frozen interfaces). C depends on B's normalized model \+ permission schema. D starts Day 2. The only hour-one freeze dependency is the interface / schema set in H0–2.

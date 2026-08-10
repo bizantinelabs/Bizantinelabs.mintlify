@@ -1,0 +1,34 @@
+---
+title: "Ship plan overview"
+sidebarTitle: "Overview"
+description: "Multi-platform control plane over Upshift, Lagoon, IPOR, Superform, and Direct."
+---
+
+**Vault OS v0.1** is the revised 72-hour ship plan superseding "Vault OS v0 — 72-Hour Ship Plan."
+
+## Operating assumptions
+
+1. **No Superform MSA is assumed.** See [Superform operational dependency](/platforms/superform/operational-dependency).
+2. **Platform vault addresses and role holders arrive later.** Direct is the only guaranteed Level-3 write path in the window.
+
+## What ships
+
+- Control plane read \+ normalize \+ permission \+ risk over all five platforms
+- Level-3 write path: [Direct](/platforms/direct/overview) SleeveVault \+ passive Morpho supply via [`GenericERC4626Adapter`](/strategies/generic-erc4626)
+- IPOR Fusion at Level-2 shadow, promotable to Level-3 the moment the Alpha role is confirmed — no code change
+- Upshift and Lagoon connectors as read-only scaffolds with `NO_ADDRESS` state
+- Superform at Level-1 read
+
+## What does not ship
+
+- Upshift / Lagoon write — blocked on missing vault addresses
+- Superform write — blocked on on-chain role verification
+- Euler passive write — Phase 1.5
+- Symbiotic write — Phase 2
+- Leverage or borrow — disabled globally by default
+
+## Read next
+
+<CardGroup cols={2}>
+      
+</CardGroup>

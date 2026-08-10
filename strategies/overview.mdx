@@ -1,0 +1,42 @@
+---
+title: "Strategies overview"
+description: "Underlying DeFi protocol positions operated through strategy adapters."
+---
+
+Strategy integrations are the underlying DeFi protocol positions Vault OS operates through [strategy adapters](/architecture/strategy-adapters). The same adapter shape is used regardless of which platform wraps the position.
+
+## First-class integrations
+
+<CardGroup cols={3}>
+  <Card title="Morpho" icon="chart-line" href="/strategies/morpho/overview">
+    Blue direct markets and MetaMorpho / Vault V2 curated vaults. First Direct write.
+  </Card>
+
+  <Card title="Euler" icon="scale-balanced" href="/strategies/euler/overview">
+    EVK \+ EVC. Passive supply enabled; borrow disabled by default.
+  </Card>
+
+  <Card title="Symbiotic" icon="circle-arrow-up" href="/strategies/symbiotic/overview">
+    Restaking vaults with epoch-locked withdrawals. Read-only in v0.1.
+  </Card>
+</CardGroup>
+
+## Generic adapters
+
+<CardGroup cols={2}>
+  <Card title="Generic ERC-4626" icon="cube" href="/strategies/generic-erc4626">
+    Deterministic `convertToAssets`, reliable exit. Used by Morpho Mode B in v0.1.
+  </Card>
+
+  <Card title="ERC-7540" icon="cubes" href="/strategies/erc7540">
+    Async request/claim vaults — required for Lagoon and Symbiotic write paths.
+  </Card>
+</CardGroup>
+
+## Additional planned integrations
+
+Enosys, SparkDEX, Spectra, Gamma, Gearbox, rewards / harvest modules, and future approved DeFi venues. See [Additional integrations](/strategies/additional-integrations).
+
+## Rule
+
+An integration is not `SUPPORTED` merely because a protocol is EVM-compatible. Every strategy integration must verify: canonical interfaces, deployed contract addresses per chain, oracle configuration, emergency-exit path, and liquid-vs-nominal liquidity calculation. See the [Capability matrix](/reference/capability-matrix).

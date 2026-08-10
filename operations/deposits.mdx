@@ -1,0 +1,24 @@
+---
+title: "Deposit processing"
+description: "Deposit flow per platform."
+---
+
+## Direct
+
+Allowlisted depositor calls `deposit(assets, receiver)` on the SleeveVault at the settled NAV. Curator-only in v0.1; third-party depositors require additional withdrawal and NAV-fairness review before enabling.
+
+## IPOR Fusion
+
+Standard ERC-4626 deposit into the Plasma Vault at NAV computed from Balance Fuses. Anti-sandwich deposit↔redeem timelock applies.
+
+## Upshift
+
+Standard ERC-4626 into the Upshift vault. NAV validated by multi-oracle \+ Max-%-Change ceiling.
+
+## Lagoon (ERC-7540)
+
+Async: `requestDeposit` → valuation-provider proposes NAV → curator settles → depositor `claim`. Deposits held in silo until settlement.
+
+## Superform
+
+Async via SuperVault triad, priced by validator quorum. Not an operational input for Bizantine in v0.1.

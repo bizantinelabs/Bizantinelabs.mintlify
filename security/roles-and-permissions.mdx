@@ -1,0 +1,32 @@
+---
+title: "Roles and permissions"
+description: "Every role, its scope, and its holder — verified on chain."
+---
+
+## Direct
+
+| Role | Signer | Scope |
+| --- | --- | --- |
+| Owner | Safe 3-of-5 \+ timelock | Adapters, params, fees, upgrades |
+| Curator | Fordefi (bounded policy) | Allocate / withdraw within caps |
+| Keeper | Fordefi (bounded policy) | Automated actions within envelope |
+| NAV signer | Fordefi (dedicated key) | `submitNAV` only |
+| Guardian | Hypernative \+ Safe | Pause on threat signal |
+
+## IPOR Fusion
+
+| Role | Signer (once verified) | Scope |
+| --- | --- | --- |
+| Owner | Immutable | Top-level |
+| Atomist | Safe \+ timelock | Day-to-day config, fees (capped) |
+| Fuse Manager | Safe \+ timelock | Add / remove fuses |
+| Alpha | Fordefi (scoped) | Execute FuseActions |
+| Guardian | Safe / Hypernative | Reject timelocked actions, pause |
+
+## Upshift, Lagoon, Superform
+
+See the per-platform pages under [Vault Platforms](/platforms/overview).
+
+## Rule
+
+A role holder is authoritative only if read from chain. `NOT VERIFIED` holders are treated as `UNKNOWN` → `BLOCKED` by the permission engine.

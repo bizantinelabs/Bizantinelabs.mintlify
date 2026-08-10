@@ -1,0 +1,25 @@
+---
+title: "Superform — Continuity"
+sidebarTitle: "Continuity"
+description: "What Bizantine can do without Superform services."
+---
+
+## Independence matrix
+
+| Property | Independent of Superform? |
+| --- | --- |
+| Read state | Yes |
+| Compute NAV | No — validator PPS |
+| Routine strategy actions | No — validators \+ global root |
+| Process withdrawals | No — validator quorum |
+| Pause | Guardian |
+| Emergency exit | Emergency-withdraw hook only (verify per vault) |
+| Migrate | Wind-down subject to platform cooperation (no MSA — no guarantee) |
+
+## Failure modes and posture
+
+Because no MSA exists (per [Operational dependency](/platforms/superform/operational-dependency)), every Superform off-chain service is treated as revocable at will. Bizantine's protection is technical:
+
+- Positions Bizantine markets to LPs are held in Bizantine-owned Direct sleeves, not directly inside SuperVault shells that Superform can freeze
+- SuperVault distribution is capped by [platform-dependency limits](/risk/platform-dependency)
+- Emergency-withdraw hooks in the strategy root are the only tested exit path where Superform is uncooperative — verify per SuperVault

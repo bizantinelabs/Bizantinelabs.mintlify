@@ -1,0 +1,48 @@
+---
+title: "Symbiotic — Overview"
+sidebarTitle: "Overview"
+description: "Restaking vaults with epoch-locked withdrawals and slashing exposure."
+---
+
+<Info>
+  **Status:** `READ-ONLY` in v0.1. Write is Phase 2, post risk-committee approval on operator / network set.
+</Info>
+
+## Architecture
+
+A Symbiotic vault is composed of:
+
+- **Vault (accounting)**
+- **Delegator** — NetworkRestake / FullRestake / OperatorSpecific / OperatorNetworkSpecific
+- **Slasher** or **VetoSlasher**
+- **Burner**
+- **Resolver** (veto)
+
+Key properties:
+
+- **7-day epoch**
+- Deposit **instant**
+- Withdraw = **request → claim**, delay 1–2 epochs (7–14 days)
+- Withdrawn funds remain slashable until epoch ends
+- **Single collateral per vault**
+- Rewards external (`defaultStakerRewards`); can be non-collateral tokens
+
+## Do not model Symbiotic as continuously-liquid ERC-4626
+
+Accounting must distinguish:
+
+- Gross deposited
+- Active delegated
+- Withdrawable
+- Pending-withdrawal
+- Claimable
+- Slashed-or-impaired
+- Accrued-unclaimed rewards
+- Epoch-locked
+
+See [Withdrawals](/strategies/symbiotic/withdrawals) and [Slashing risk](/strategies/symbiotic/slashing-risk).
+
+## Sources
+
+- docs.symbiotic.fi
+- github.com/symbioticfi/core

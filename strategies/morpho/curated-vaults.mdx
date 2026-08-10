@@ -1,0 +1,61 @@
+---
+title: "Morpho — Curated vaults"
+sidebarTitle: "Curated vaults"
+description: "MetaMorpho / Morpho Vault V2 supply and withdraw. v0.1 write path."
+---
+
+<Info>
+  **Status:** `PILOT`. First Direct write path in v0.1, reached via [`GenericERC4626Adapter`](/strategies/generic-erc4626).
+</Info>
+
+## Vault model
+
+A curated Morpho vault (MetaMorpho or Morpho Vault V2) is an ERC-4626 vault with:
+
+| Role | Function |
+| --- | --- |
+| Owner | Top-level authority (timelocked) |
+| Curator | Market whitelist and cap management |
+| Allocator | Rebalances between whitelisted markets |
+| Guardian | Veto / pause |
+
+Plus:
+
+- Supply queue and withdraw queue
+- Per-market caps
+- Timelocks on curator changes
+- Valuation via `convertToAssets`
+
+## Do not conflate liquidity concepts
+
+The control plane must distinguish:
+
+1. Market underlying liquidity
+2. Vault-available liquidity
+3. Nominal `totalAssets`
+4. Immediately-withdrawable amount
+5. Queue / utilization-delayed amount
+
+Redemption planning depends on (4), not (3).
+
+## v0.1 flow
+
+```mermaid
+sequenceDiagram
+    participant Cur as Curator (Fordefi)
+    participant Sleeve as SleeveVault
+    participant Adapter as GenericERC4626Adapter
+    participant MV as Morpho Curated Vault
+
+    Cur->>Sleeve: allocate(adapter, assets)
+    Sleeve->>Adapter: deposit(assets, "")
+    Adapter->>MV: deposit(assets, adapter)
+    MV-->>Adapter: shares
+    Adapter->>Adapter: track via convertToAssets(shares)
+```
+
+Exit is the mirror image: `Adapter.withdraw(assets, ...)` → `MV.withdraw(assets, adapter, adapter)`.
+
+## Fork tests
+
+Curated-vault allocation; high-utilization withdrawal; cap breach; queue reconfig; emergency withdraw; unauthorized market (must revert).

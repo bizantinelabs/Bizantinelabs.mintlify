@@ -1,0 +1,35 @@
+---
+title: "IPOR Fusion — Roles and permissions"
+sidebarTitle: "Roles & permissions"
+description: "AccessManager roles on IPOR Plasma Vaults. Holders unverified until read from chain."
+---
+
+## Roles
+
+| Role | Scope | v0.1 signer |
+| --- | --- | --- |
+| Owner | Immutable, top-level | — |
+| Atomist | Day-to-day config, fees (capped, timelocked) | Safe \+ timelock |
+| Fuse Manager | Add / remove fuses (timelocked) | Safe \+ timelock |
+| Alpha | Execute FuseActions | Fordefi (SDK) |
+| Guardian | Reject timelocked actions, pause | Safe / Hypernative |
+
+## Bizantine role holdings
+
+<Warning>
+  Atomist, Alpha, Fuse Manager, and Guardian holders on the Base Plasma Vault are `NOT VERIFIED` in this documentation. The permission engine returns `BLOCKED` for any IPOR write until each holder is read from chain and confirmed equal to a Bizantine-controlled address.
+</Warning>
+
+## Alpha key envelope (v0.1)
+
+When the Alpha role is confirmed Fordefi-controlled on the Base vault, the Fordefi policy for that key mirrors the on-chain AccessManager Alpha scope:
+
+- `FuseAction` targets restricted to approved fuses only
+- Notional cap: low four figures per action
+- This-vault-only
+- Simulation-required
+- Deny-on-Hypernative-alert
+
+So a key compromise still cannot exceed IPOR's own limits.
+
+See [Key management](/security/key-management).

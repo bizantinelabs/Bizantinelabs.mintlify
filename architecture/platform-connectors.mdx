@@ -1,0 +1,87 @@
+---
+title: "Platform connectors"
+description: "The off-chain layer that normalizes each vault platform."
+---
+
+A **platform connector** is off-chain TypeScript that handles infrastructure-specific operations for one platform. It normalizes every platform into one `IVaultPlatformConnector` interface so the control plane can operate any vault through the same code path.
+
+## Interface
+
+```ts
+type PlatformId =
+  | "UPSHIFT"
+  | "LAGOON"
+  | "IPOR_FUSION"
+  | "SUPERFORM"
+  | "DIRECT";
+
+interface IVaultPlatformConnector {
+  platformId(): PlatformId;
+
+  discoverVault(
+    vaultAddress: `0x${string}`
+  ): Promise<DiscoveredVault>;
+
+  getVaultState(
+    vault: RegisteredVault
+  ): Promise<NormalizedVaultState>;
+
+  getCapabilities(
+    vault: RegisteredVault
+  ): Promise<PlatformCapabilities>;
+
+  getPermissions(
+    vault: RegisteredVault
+  ): Promise<PermissionSnapshot>;
+
+  getDependencies(
+    vault: RegisteredVault
+  ): Promise<DependencySnapshot>;
+
+  buildAction(
+    vault: RegisteredVault,
+    action: NormalizedVaultAction
+  ): Promise<BuiltTransactionBundle>;
+
+  simulateAction(
+    bundle: BuiltTransactionBundle
+  ): Promise<SimulationResult>;
+
+  getEmergencyPlan(
+    vault: RegisteredVault
+  ): Promise<EmergencyPlan>;
+
+  getMigrationPlan(
+    vault: RegisteredVault
+  ): Promise<MigrationPlan>;
+}
+```
+
+See [Normalized model](/developers/normalized-model) for the data shapes.
+
+## What a connector does
+
+- Vault discovery, contract state, NAV state, deposit/redemption state
+- Roles, operators, pauses, timelocks
+- Transaction construction against the platform's native contracts
+- External approval requirements
+- Migration and platform-continuity metadata
+
+## What a connector must never do
+
+- **Custody assets.** Connectors build calldata and determine signers; they never hold funds.
+- **Bypass native platform access control.** Every write must pass the platform's on-chain permissioning.
+- **Assert roles from documentation.** Role holders are read from chain.
+- **Halt other connectors on failure.** Isolated processes.
+
+## Distinction from strategy adapters
+
+| Question | Platform connector | Strategy adapter |
+| --- | --- | --- |
+| Layer | Off-chain TypeScript | On-chain Solidity |
+| Answers | How to operate a vault on this platform? | How does a vault enter / monitor / value / exit an underlying protocol position? |
+| Scope | One platform's operating envelope | One protocol position (Morpho market, Euler EVault, Symbiotic vault, LP…) |
+| Custody-relevant? | Never custodies | Executes value movement within caps |
+| Example | `IporConnector.buildAction(vault, { type: "allocate", ... })` | `MorphoStrategyAdapter.deposit()` |
+
+A Morpho position reached through an Upshift vault is a `MorphoStrategyAdapter`-shaped exposure for risk aggregation, but operating it goes through the Upshift connector (August policy engine \+ operator), not a direct Morpho call. The control plane represents both facts simultaneously.

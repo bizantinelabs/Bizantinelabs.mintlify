@@ -1,0 +1,64 @@
+---
+title: "Risk engine"
+description: "Cross-platform exposure aggregation and platform-dependency risk."
+---
+
+The risk engine consumes `NormalizedPosition` records from every connector and aggregates exposure across the entire book. Wrappers never hide underlying exposure.
+
+## Aggregation dimensions
+
+Exposure is summed across:
+
+- Protocol (Morpho, Euler, Symbiotic, ...)
+- Chain
+- Underlying asset
+- Collateral asset
+- Debt asset
+- Oracle
+- Market
+- Vault
+- Operator (Symbiotic)
+- Network (Symbiotic)
+- Counterparty
+- Platform provider (Upshift, Lagoon, IPOR, Superform, Direct)
+
+### Example
+
+Morpho exposure reached via IPOR \+ via Direct \+ via a future Upshift or Lagoon vault aggregates to:
+
+- One combined Morpho number
+- One combined per-market number
+- One combined oracle-dependency number
+
+## Platform-dependency risk
+
+A first-class category. See [Platform dependency risk](/risk/platform-dependency).
+
+Any single non-Direct platform holding \> 25% of Bizantine NAV with `routineOperationsRequirePlatform || withdrawalsRequirePlatform || navRequiresPlatform == true` pages the on-call. Hard ceiling: **≤ 20% NAV per non-Direct platform** until independent unwind is demonstrated.
+
+## On-chain hard controls
+
+- Per-adapter, per-protocol, per-asset caps
+- Target and selector allowlists
+- Slippage and deadline
+- NAV delta and staleness
+- Minimum idle buffer
+- Hardcoded target addresses per adapter
+- Pause switches
+
+## Off-chain monitored
+
+- Cross-platform aggregates
+- Health factors (Euler, borrow positions)
+- Concentrated liquidity ranges
+- Oracle deviation across sources
+- Redemption-coverage ratio
+- Bridge aging
+- Platform service health
+- Platform-dependency %
+
+## Protocol-specific overlays
+
+- **Symbiotic**: operator / network / slasher concentration, epoch-locked haircut on withdrawing positions
+- **Euler**: health factor, LTV, leverage (borrow disabled by default)
+- **Morpho**: LLTV, utilization, bad-debt detection, queue-cap validation

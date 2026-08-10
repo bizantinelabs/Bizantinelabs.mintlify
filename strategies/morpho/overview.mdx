@@ -1,0 +1,45 @@
+---
+title: "Morpho — Overview"
+sidebarTitle: "Overview"
+description: "Blue direct markets and MetaMorpho / Vault V2 curated vaults."
+---
+
+<Info>
+  **Status:** `PILOT` (Mode B, curated vault via `GenericERC4626Adapter`) — first Direct write in v0.1. Mode A (direct market) is `READ-ONLY` in v0.1.
+</Info>
+
+Morpho is a first-class strategy integration. Two integration modes:
+
+## Mode A — direct market (Morpho Blue)
+
+Morpho Blue is an immutable singleton. Markets are keyed by:
+
+```text
+(loanToken, collateralToken, oracle, IRM, LLTV)
+```
+
+Supply / withdraw / borrow / repay / collateral. See [Direct markets](/strategies/morpho/direct-markets).
+
+## Mode B — curated vault (MetaMorpho / Vault V2)
+
+Curated ERC-4626 vault with Owner / Curator / Allocator / Guardian roles, supply and withdraw queues, per-market caps, and timelocks. Valued via `convertToAssets`. See [Curated vaults](/strategies/morpho/curated-vaults).
+
+## Why Mode B is the v0.1 write
+
+Ranked by: existing Bizantine deployment, deterministic valuation, withdrawal reliability, audited pattern reuse, lowest leverage/liquidation risk, Flare availability, business urgency. Mode B wins.
+
+- Deterministic `convertToAssets`
+- Reliable exit
+- Bizantine already runs a Morpho Vault V2
+- Zero leverage
+- Reachable via the existing `GenericERC4626Adapter`
+
+## Deployment note
+
+Separate **canonical Morpho** deployments from Mystic or other Morpho-compatible deployments. Do not assume Mystic == canonical Morpho — its interfaces, governance, market config, oracle, and withdrawal behavior must be confirmed on chain. Flare cells are `NOT VERIFIED` until the specific deployment is confirmed.
+
+## Sources
+
+- Morpho Blue documentation
+- MetaMorpho / Morpho Vault V2 documentation
+- On-chain deployment addresses per chain (verify)

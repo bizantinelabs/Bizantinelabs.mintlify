@@ -1,0 +1,44 @@
+---
+title: "NAV risk"
+description: "Sources of NAV error, bounds, and mitigations."
+---
+
+## Sources of NAV error
+
+- Stale oracle price
+- Oracle deviation across sources
+- Rebasing behavior not captured by adapter
+- Bad-debt propagation from underlying markets
+- Reward valuation drift (stale non-collateral tokens)
+- Slashing events (Symbiotic) between requests and epoch end
+- Bridge in-flight positions during transit
+
+## Mitigations
+
+- Multi-source price validation
+- Independent NAV recompute in the monitor process
+- Bounded delta per submission (`maxDeltaBpsPerHour · Δt`)
+- Force-NAV path (2-of-3 or Safe) for legitimate large moves, always audit-logged
+- Stale-reward exclusion
+- Epoch-locked haircut for Symbiotic pending positions
+- `BRIDGE_IN_FLIGHT` aging
+
+## Alert rules
+
+- Independent recompute delta \> 5 bps — alert
+- Delta \> 75 bps — auto-pause via Hypernative
+- Oracle deviation across sources \> threshold — alert
+- NAV staleness \> `maxStaleness` — block new deposits / actions consuming NAV
+
+## Corrected invariants
+
+The original v0 invariant "PPS never decreases" was removed. A loss-bearing vault can legitimately lose value. The corrected invariants are documented in [Invariants](/security/invariants):
+
+- No over-issuance
+- Asset conservation
+- Accounting identity (mint vs burn)
+- PPS moves only for cause
+- No unauthorized extraction
+- Allowlist holds
+- Withdrawal correctness (async)
+- Pause safety

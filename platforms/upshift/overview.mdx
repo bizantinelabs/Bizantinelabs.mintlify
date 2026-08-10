@@ -1,0 +1,38 @@
+---
+title: "Upshift — Overview"
+sidebarTitle: "Overview"
+description: "Powered by August Digital. ERC-4626 vault + August subaccounts + policy engine."
+---
+
+<Info>
+  **Status:** `READ-ONLY` scaffold. `NO_ADDRESS` — no Bizantine Upshift vault known to exist yet. Promotes to `SHADOW MODE` on address; to `PILOT` only after on-chain-verified role holders.
+</Info>
+
+## Architecture
+
+An Upshift vault is an ERC-4626 vault that deploys capital into **August subaccounts** (smart-contract wallets). The **August policy engine** enforces chain/protocol/token/function-selector restrictions on every transaction from the subaccount.
+
+## Key properties
+
+- Multi-oracle NAV validation with a **Max Percentage Change** ceiling on the share/asset ratio per update (anti-manipulation / anti-latency-arb)
+- Withdrawal liquidity buffer for immediate redemptions
+- Emergency multisig function pauses deposits/withdrawals and pulls all strategy funds back to the vault
+- Solana variant (`august_vault` program): `admin` / `operator` / `fee-recipient` roles with two-step admin transfer
+
+## Continuity read
+
+Bizantine can read state on chain. Routine strategy execution requires the August policy engine \+ operator path — an August/Upshift outage plausibly blocks new strategy actions even if funds remain on chain. See [Continuity](/platforms/upshift/continuity).
+
+## Integration capability
+
+| Capability | Support |
+| --- | --- |
+| Read (state, NAV, positions) | `READ-ONLY` when address provided |
+| Build \+ simulate | `SHADOW MODE` (planned once address provided) |
+| Execute | `REQUIRES PLATFORM APPROVAL` |
+| Emergency exit | `REQ Owner multisig` (co-signed) |
+| Last verified | — |
+
+## Sources
+
+- docs.upshift.finance (architecture, vault-flow, risk-management, solana-vaults, FAQ)

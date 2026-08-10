@@ -1,0 +1,24 @@
+---
+title: "NAVSource"
+sidebarTitle: "NAVSource"
+description: "On-chain NAV feed for Direct sleeves."
+---
+
+## NAVSource
+
+`NAVSource` is the on-chain contract that receives `submitNAV(...)` calls from the NAV signer (Fordefi, dedicated key). It enforces:
+
+- `maxDeltaBpsPerHour · Δt` bound per single step
+- `maxAge` freshness
+- Signer role check
+- Bounded corridors per vault
+
+Breaches revert. A step outside the corridor requires a `forceNAV` path (2-of-3 or Safe \+ timelock, per configuration), never automated.
+
+## NAVSourcedSleeve
+
+`NAVSourcedSleeve` is the settlement side. It reads NAV from `NAVSource`, applies asset conservation and no-over-issuance checks, and mints or burns shares against the settled NAV.
+
+## Bizantine-independent recompute
+
+Before any `submitNAV`, the monitoring service independently recomputes NAV from chain (adapter reads, oracle reads with freshness \+ deviation checks) and compares to the intended submission. Mismatch beyond tolerance halts the submission and pages the on-call. See [NAV updates](/operations/nav-updates).

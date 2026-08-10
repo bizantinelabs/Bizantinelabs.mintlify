@@ -1,0 +1,53 @@
+---
+title: "Symbiotic — Slashing risk"
+sidebarTitle: "Slashing risk"
+description: "Slashing exposure, veto, and concentration limits."
+---
+
+## Slashing model
+
+- `Slasher` — base slasher; instant slashing per protocol logic
+- `VetoSlasher` — slashing proposals with a veto window enforced by a Resolver
+
+Burner receives slashed collateral. Resolver can veto slashing proposals within the window (for VetoSlasher).
+
+## Concentration limits
+
+- Max operator concentration — no single operator \> X% of a Symbiotic position
+- Max network concentration — no single network \> Y% of a Symbiotic position
+- Max slasher concentration — for `VetoSlasher`, monitor Resolver identity
+- Max Symbiotic-total concentration — across all Symbiotic positions in the book
+
+## Locked-value haircut
+
+Pending withdrawals are still slashable this epoch. The risk engine applies an **epoch-locked haircut** — a discount reflecting slashing risk during the pending period.
+
+## Reward valuation
+
+Rewards may be paid in non-collateral tokens with independent liquidity. Reward valuation is subject to `staleRewardValuation` policy: values older than a threshold are marked stale and excluded from NAV.
+
+## Emergency exit
+
+<Warning>
+  Symbiotic emergency exit is bounded by the epoch mechanics. Positions cannot be exited faster than the withdrawal delay. This is a structural constraint, not a policy choice.
+</Warning>
+
+Emergency exit in Symbiotic:
+
+1. Submit withdraw requests for the full active balance
+2. Wait 1–2 epochs (7–14 days)
+3. Claim after epoch ends
+
+During the delay, positions remain slashable. Alerts fire and the risk engine flags Symbiotic exposure as `EMERGENCY_EXIT_IN_PROGRESS` for concentration accounting.
+
+## Questions for the Symbiotic team
+
+See [Ship plan — open questions](/ship-plan/open-questions).
+
+1. Which vault interface for deposit / withdraw-request?
+2. Epoch and claimable determination?
+3. Slashed-position valuation?
+4. Operator / network exposure retrieval?
+5. Reward contracts and valuation?
+6. Can a vault unwind independently if an operator or network goes unavailable?
+7. Deployments appropriate for institutional capital?

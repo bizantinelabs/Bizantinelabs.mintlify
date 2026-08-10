@@ -1,0 +1,34 @@
+---
+title: "Platform dependency risk"
+description: "First-class risk category introduced in v0.1."
+---
+
+Platform dependency risk quantifies how much Bizantine's book depends on any one non-Direct platform's off-chain services.
+
+## Signals
+
+Per platform, the connector's `DependencySnapshot` reports:
+
+- `routineOperationsRequirePlatform`
+- `withdrawalsRequirePlatform`
+- `navRequiresPlatform`
+- `emergencyExitRequiresPlatform`
+- `migrationRequiresPlatform`
+
+## Alert threshold
+
+> If any single platform holds \> **25%** of Bizantine NAV **and** (`routineOperationsRequirePlatform` ∪ `withdrawalsRequirePlatform` ∪ `navRequiresPlatform`), page the on-call.
+
+## Hard ceiling
+
+> ≤ **20%** NAV per non-Direct platform until that platform's independent-unwind is demonstrated on chain.
+
+## Summary
+
+|  | Direct | IPOR | Upshift | Lagoon | Superform |
+| --- | --- | --- | --- | --- | --- |
+| Routine ops require platform | No | No (Alpha on-chain) | Likely yes | Curator (Bizantine if held) | Yes |
+| Withdrawals require platform | No | No | Operator processing | Curator settle | Validator PPS |
+| NAV requires platform | No | No | Multi-oracle platform service | Valuation provider (maybe Lagoon) | Validator quorum |
+| Emergency exit requires platform | No | No | Owner multisig co-sign | Curator | Curator emergency (hook only) |
+| Service health gates funds | No | Low | Medium–high | Medium | Medium–high |

@@ -1,0 +1,29 @@
+---
+title: "Upshift — Roles and permissions"
+sidebarTitle: "Roles & permissions"
+description: "Upshift role model. Holders unverified until read from chain."
+---
+
+## Roles
+
+| Role | Responsibility |
+| --- | --- |
+| Vault Operator | Loans, APR, callbacks |
+| Subaccount Manager / Curator | Deploys within whitelist; **cannot withdraw to EOA** (enforced by contract) |
+| Lender / Owner (multisig) | Upshift \+ partner multisig; oversees whitelisting and permissions |
+
+## Bizantine role holdings
+
+<Warning>
+  No Bizantine Upshift vault has been provided. Every role holder above is `NOT VERIFIED`. The permission engine returns `BLOCKED` for any Upshift action until a vault address is registered and role holders are read from chain.
+</Warning>
+
+## Enforcement points
+
+- August **policy engine** allowlist (protocols / tokens / function selectors)
+- Vault-level pause / pull-to-vault via Owner multisig
+- Contract-enforced no-withdraw-to-EOA for Curator
+
+## Bizantine dual-lock
+
+Even if Bizantine controls Curator on an Upshift vault, the Fordefi policy for that key must encode the same envelope as the August policy engine. Vault OS never bypasses native controls. See [Key management](/security/key-management).

@@ -1,0 +1,55 @@
+---
+title: "Architecture at a glance"
+description: "High-level view of the Bizantine Vault OS control plane."
+---
+
+```mermaid
+flowchart TD
+    Users[Depositors and Allocators]
+    Control[Bizantine Vault Control Plane]
+    NAV[NAV and Accounting Engine]
+    Risk[Risk Engine]
+    Perm[Permission Engine]
+    Action[Action Engine]
+    Keeper[Keeper and Automation]
+    Monitor[Monitoring and Incident Response]
+
+    Users --> Control
+    Control --> NAV
+    Control --> Risk
+    Control --> Perm
+    Control --> Action
+    Action --> Keeper
+    Keeper --> Monitor
+
+    Control --> Upshift[Upshift Connector]
+    Control --> Lagoon[Lagoon Connector]
+    Control --> IPOR[IPOR Fusion Connector]
+    Control --> Superform[Superform Connector]
+    Control --> Direct[Direct Vault Connector]
+
+    Upshift --> Strategies[Strategy Adapters]
+    Lagoon --> Strategies
+    IPOR --> Strategies
+    Superform --> Strategies
+    Direct --> Strategies
+
+    Strategies --> Morpho[Morpho]
+    Strategies --> Euler[Euler]
+    Strategies --> Symbiotic[Symbiotic]
+    Strategies --> Other[Additional Approved Protocols]
+```
+
+## Reading the diagram
+
+- **Control plane** (Bizantine-owned, off-chain \+ on-chain) sits above every platform.
+- **Connectors** normalize each platform into one interface. See [Platform connectors](/architecture/platform-connectors).
+- **Strategy adapters** operate underlying DeFi positions and are the same shape regardless of which platform wraps them. See [Strategy adapters](/architecture/strategy-adapters).
+- **Direct** is the fallback substrate: any platform position that must be exited can be re-homed into a Direct SleeveVault.
+
+## Related diagrams
+
+- [Transaction lifecycle](/operations/rebalancing)
+- [NAV submission](/operations/nav-updates)
+- [Emergency pause and unwind](/operations/emergency-unwind)
+- [Platform migration](/operations/migration)

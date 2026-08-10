@@ -1,0 +1,33 @@
+---
+title: "Go / no-go"
+description: "Hard gates. No cap unfreezes until every gate passes."
+---
+
+## Hard gates before unfreezing caps beyond zero
+
+1. Direct sleeve owned by Safe \+ timelock, guarded by Hypernative auto-pause; canary pause proven
+2. NAV independent-recompute deviation \< 5 bps for at least 3 cycles
+3. Fork tests pass on Flare \+ Ethereum for supply / withdraw / emergency-exit round-trips
+4. ≥ 4h cumulative Echidna / Medusa green on the corrected invariant set (`solvency`, `conservation`, `authorization`, `pause-safety`, `no-double-spend`)
+5. Fordefi curator \+ keeper policies encode the exact envelope
+6. Permission engine returns `BLOCKED` for every platform whose role holders are unverified or `NO_ADDRESS`
+7. Cross-platform risk report generated and reviewed for every registered address
+8. `getEmergencyPlan` \+ `getMigrationPlan` return non-empty plans for every registered vault; rollback rehearsed with \$1k
+
+## Additional gate for Level-3 IPOR write
+
+- Base Plasma Vault reads clean
+- Atomist / Alpha / Fuse Manager / Guardian read from chain and confirmed to equal Bizantine-controlled addresses
+- Fordefi Alpha policy encoding the AccessManager Alpha scope on that specific Plasma Vault
+- Approved-fuse allowlist matches on-chain fuse set
+- Single low-notional test action simulates cleanly on live state
+
+## Accepted temporary risks
+
+1. Morpho curated-vault write path is exercised with `≤ $50k`, guarded by Hypernative and platform-native controls, until external review
+2. IPOR write is a single approved allocate \+ instant-withdraw at low notional
+3. Cross-platform accounting for provided addresses may be re-tuned once real state is observed — no automated NAV settlement is permitted where Bizantine's independent NAV differs from platform-proposed NAV beyond tolerance
+
+## Roll-back
+
+Any gate fails → stay at cap 0 (or shadow only) and communicate the specific blocker.

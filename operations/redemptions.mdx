@@ -1,0 +1,35 @@
+---
+title: "Redemption processing"
+description: "Redemption flow and withdrawal-liability management."
+---
+
+## Direct
+
+Curator withdraws from adapters as needed to restore idle balance; depositor `redeem` / `withdraw` served against the settled NAV.
+
+## IPOR Fusion
+
+Instant-withdraw fuse (where configured) or scheduled `WithdrawManager`: `request → Alpha releaseFunds → user redeemFromRequest`.
+
+## Upshift
+
+Withdrawal liquidity buffer serves immediate redemptions; larger redemptions require Vault Operator processing.
+
+## Lagoon (ERC-7540)
+
+`requestRedeem` → valuation-provider proposes NAV → curator settles → user `claim` after settlement.
+
+## Symbiotic
+
+**Never model as instant.** `requestWithdraw` → epoch delay 1–2 epochs (7–14 days) → claim. Pending amounts remain slashable until epoch ends.
+
+## Withdrawal liability management
+
+The control plane tracks:
+
+- Outstanding share value vs claimable assets
+- Pending withdrawal balances by platform / vault
+- Redemption-coverage ratio
+- Withdrawal-delay-weighted liquidity
+
+Alert on redemption coverage below configured threshold. See [NAV risk](/risk/nav-risk) and [Liquidity](/risk/liquidity).

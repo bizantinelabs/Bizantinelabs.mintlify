@@ -1,0 +1,23 @@
+---
+title: "Superform — Distribution"
+sidebarTitle: "Distribution"
+description: "SuperVault as a distribution surface, not an execution environment."
+---
+
+Superform is treated as an optional **distribution** surface, not a routine execution environment. Depositor flow through SuperVault shells can bring LP breadth without requiring Bizantine to move book operations onto Superform infrastructure.
+
+## Design intent (Phase 1.5\+)
+
+- SuperVault → sleeve allowlisting: a SuperVault whose strategy root permits allocation into a Bizantine Direct SleeveVault as the underlying strategy
+- Validators price the SuperVault; Bizantine independently prices the sleeve
+- Emergency-withdraw hook in the strategy root pulls assets back to the sleeve or to a Bizantine-controlled address
+
+## Preconditions before enabling
+
+- Confirm which on-chain role (if any) Superform holds on the Bizantine SuperVault — read from chain
+- Confirm the generic 4626 hook covers arbitrary Bizantine sleeve addresses
+- Confirm validator willingness / configuration to price the sleeve
+- Confirm strategy-root update process and SLA
+- Confirm timelock scope and fee / points impact
+
+Until each precondition is confirmed on chain, the write path stays out. See [Continuity](/platforms/superform/continuity).

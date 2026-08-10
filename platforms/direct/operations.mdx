@@ -1,0 +1,30 @@
+---
+title: "Direct — Operations"
+sidebarTitle: "Operations"
+description: "Deposits, allocation, NAV, redemption, and emergency paths for Direct sleeves."
+---
+
+## Deposits
+
+- Allowlisted depositor set (curator-only in v0.1)
+- Standard `deposit` / `mint` against the settled NAV
+
+## Allocation
+
+Curator (Fordefi) calls `SleeveVault.allocate(adapter, assets)` which routes to a registered adapter. In v0.1 the first-enabled adapter is the `GenericERC4626Adapter` targeting a [Morpho curated vault](/strategies/morpho/curated-vaults).
+
+## NAV
+
+See [NAVSource](/platforms/direct/nav-source) and [NAV updates](/operations/nav-updates).
+
+## Redemption
+
+- Curator-triggered `withdraw` from adapters to restore idle balance
+- Standard `redeem` / `withdraw` against settled NAV
+- Redemption coverage ratio monitored off-chain
+
+## Emergency controls
+
+- Hypernative sentinel pauses on PPS delta beyond bound, unexpected outbound transfer, adapter-target exploit signal, or cross-platform underlying flag
+- Safe unpause requires 3-of-5 \+ timelock
+- Emergency unwind path routes all adapter positions back to the SleeveVault asset via `emergencyExit` on each adapter

@@ -1,0 +1,36 @@
+---
+title: "NAV updates"
+description: "Independent recompute, delta bounds, submit path."
+---
+
+## Flow
+
+```mermaid
+flowchart LR
+    A[Adapter reads] --> B[Oracle reads]
+    B --> C[Independent recompute]
+    C --> D{Delta ≤ tolerance?}
+    D -- no --> H[Halt + alert]
+    D -- yes --> E{Delta ≤ maxDeltaBpsPerHour · Δt?}
+    E -- no --> F[Escalate: forceNAV path]
+    E -- yes --> G[Build submitNAV tx]
+    G --> I[Simulate]
+    I --> J[Fordefi NAV signer]
+    J --> K[NAVSource on-chain]
+    K --> L[NAVSourcedSleeve settle]
+```
+
+## Bounds
+
+- Per-vault `maxAge`
+- Per-vault `maxDeltaBpsPerHour`
+- Tolerance vs independent recompute (default 5 bps)
+- On-chain step bound in `NAVSource`
+
+## Freshness enforcement
+
+Actions require the NAV `age ≤ maxAge`. Stale NAV → permission engine returns `BLOCKED`.
+
+## Force path
+
+A step outside the corridor requires 2-of-3 or Safe \+ timelock, never automated. Legitimate loss events use this path.

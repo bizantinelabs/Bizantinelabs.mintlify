@@ -1,0 +1,67 @@
+---
+title: "Strategy adapters"
+description: "The on-chain interface for underlying DeFi positions."
+---
+
+A **strategy adapter** is on-chain Solidity that operates one underlying DeFi position — a Morpho market, an Euler EVault, a Symbiotic vault, an ERC-4626 vault, a LP position, and so on.
+
+One platform vault may contain several strategy positions. The same protocol exposure (e.g., Morpho supply) may exist across several platforms simultaneously. Risk aggregation deduplicates by protocol regardless of which platform wraps it.
+
+## Interface
+
+```solidity
+interface IStrategyAdapter {
+    function asset() external view returns (address);
+
+    function grossAssets() external view returns (uint256);
+
+    function liquidAssets() external view returns (uint256);
+
+    function pendingAssets() external view returns (uint256);
+
+    function liabilities() external view returns (uint256);
+
+    function netAssets() external view returns (uint256);
+
+    function deposit(
+        uint256 assets,
+        bytes calldata data
+    ) external returns (uint256 deployedAssets);
+
+    function withdraw(
+        uint256 assets,
+        bytes calldata data
+    ) external returns (uint256 receivedAssets);
+
+    function harvest(
+        bytes calldata data
+    ) external returns (uint256 harvestedValue);
+
+    function validatePosition()
+        external
+        view
+        returns (bool valid, bytes memory reason);
+
+    function emergencyExit(
+        bytes calldata data
+    ) external returns (uint256 recoveredAssets);
+}
+```
+
+## Value accounting
+
+Every adapter must separately expose:
+
+- `grossAssets` — total notional under the position
+- `liquidAssets` — immediately withdrawable
+- `pendingAssets` — requested but not yet claimable (ERC-7540, Symbiotic epochs, scheduled withdrawals)
+- `liabilities` — outstanding debt, borrowed principal, or other claims against gross
+- `netAssets` — `grossAssets − liabilities`
+
+A position with a debt or pending withdrawal that does not populate its liability field is a rejected record.
+
+## Adapter registry
+
+Only adapters registered by the Safe (behind timelock) may be called by the curator role. Every adapter is bound to hardcoded target addresses and function selectors — the curator cannot call arbitrary calldata through it.
+
+See [Adding a strategy adapter](/developers/adding-strategies) for the review \+ deployment process.

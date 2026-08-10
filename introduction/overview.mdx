@@ -1,0 +1,35 @@
+---
+title: "What is Bizantine Vault OS?"
+description: "Overview of the multi-platform vault control plane."
+---
+
+Bizantine Vault OS is a control plane that operates vaults across independent execution environments — Upshift, Lagoon, IPOR Fusion, Superform, and Direct Bizantine vaults — through one normalized model.
+
+## What it does
+
+- **Reads and reconciles** state, NAV, and positions across every platform Bizantine touches
+- **Normalizes** vaults and positions into one common schema
+- **Determines permissions** for any action — role holder, threshold, Fordefi policy, platform allowlist, timelock, pause, NAV freshness, simulability, independent unwind
+- **Aggregates risk** across protocols, chains, assets, and platforms
+- **Constructs and simulates** transactions per platform's native contracts, never bypassing platform access controls
+- **Executes** only when every permission check resolves positively — `Unknown = Blocked`
+
+## What it does not do
+
+- It does not custody assets. Platforms and the underlying protocols hold custody.
+- It does not replace platform access controls. Every write must pass both the platform's native access control **and** a Fordefi policy encoding the same envelope.
+- It does not treat any platform as authoritative for Bizantine's book. NAV, positions, and history are independently reconstructed from chain wherever technically possible.
+
+## Layers
+
+<CardGroup cols={2}>
+  <Card title="Platform connectors" icon="plug" href="/architecture/platform-connectors">
+    Off-chain TypeScript. One connector per platform (Upshift, Lagoon, IPOR, Superform, Direct).
+  </Card>
+
+  <Card title="Strategy adapters" icon="gears" href="/architecture/strategy-adapters">
+    On-chain Solidity. One adapter per underlying DeFi protocol position.
+  </Card>
+</CardGroup>
+
+The distinction is load-bearing. See [Platform connectors vs strategy adapters](/architecture/platform-connectors) for the full reasoning.

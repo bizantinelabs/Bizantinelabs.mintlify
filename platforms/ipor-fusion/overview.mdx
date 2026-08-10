@@ -1,0 +1,53 @@
+---
+title: "IPOR Fusion — Overview"
+sidebarTitle: "Overview"
+description: "Plasma Vault + Fuses + AccessManager. Selected v0.1 platform write path."
+---
+
+<Info>
+  **Status:** `SHADOW MODE`. Promotes to `PILOT` the moment the Base Plasma Vault's Alpha holder is confirmed Fordefi-controlled.
+</Info>
+
+## Architecture
+
+- **Plasma Vault** — ERC-4626 Diamond proxy with immutable core logic
+- **Fuses** — non-upgradable stateless connectors (Enter / Exit / instantWithdraw) into underlying protocols
+- **Balance Fuses** (mandatory) — accounting
+- **WithdrawManager** — scheduled: `request → Alpha releaseFunds → user redeemFromRequest`
+- **RewardsManager**
+- **PriceManager / PriceOracleMiddleware**
+- **FeeManager**
+
+Deposit ↔ redeem timelock (anti-sandwich). Instant vs Scheduled withdrawal vaults.
+
+## Access control
+
+OZ **AccessManager** (`Roles.sol`):
+
+| Role | Function |
+| --- | --- |
+| Owner | Immutable |
+| Atomist | Curator / day-to-day config |
+| Fuse Manager | Add / remove fuses |
+| Alpha | Execution / strategy (off-chain) |
+| Guardian | Reject timelocked actions, pause/unpause |
+
+## Why IPOR is the v0.1 write path
+
+- Bizantine already controls Atomist / Alpha on a live Base Plasma Vault (pending on-chain verification)
+- Official Python SDK, `fusion` CLI, and MCP server (`ipor-fusion.py`) — writes are executable through a maintained, typed SDK rather than bespoke calldata
+- Existing production fuses include Morpho Blue, Euler V2, Aave, Gearbox, Compound, Fluid, and a generic ERC4626 fuse
+- Non-upgradable fuses reduce upgrade-key trust
+
+## v0.1 approved action
+
+One small approved action, subject to Alpha-role confirmation:
+
+> Allocate idle → approved ERC4626 or Morpho fuse → instant-withdraw, notional ≤ low four figures, simulation-required.
+
+Execution only through Fordefi/Safe with the permission engine returning `EXECUTABLE`.
+
+## Sources
+
+- docs.ipor.io (vault-configuration, smart-contracts, fuses, vaults)
+- github.com/IPOR-Labs/ipor-fusion.py

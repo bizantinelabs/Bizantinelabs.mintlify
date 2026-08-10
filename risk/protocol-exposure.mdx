@@ -1,0 +1,24 @@
+---
+title: "Protocol exposure"
+description: "Aggregated across every wrapper."
+---
+
+Protocol exposure is aggregated across every platform. Morpho reached via IPOR \+ via Direct \+ via Upshift \+ via Lagoon = one combined Morpho number, one combined per-market number, one combined oracle-dependency number.
+
+Enforced by making the risk engine consume `NormalizedPosition.protocol` regardless of which connector produced it.
+
+## Dimensions tracked
+
+- Per protocol
+- Per (protocol, chain)
+- Per (protocol, market or vault ID)
+- Per (protocol, oracle)
+- Per (protocol, collateral asset) / (protocol, debt asset)
+
+## Caps
+
+Caps are set at the aggregated level, not per-wrapper. Allocating additional capital to Morpho via IPOR when the aggregated Morpho cap is already at limit → rejected before build.
+
+## Cross-platform propagation
+
+If the same underlying protocol is flagged as compromised anywhere in the world, Hypernative pauses **every** Bizantine vault exposed to that protocol — not only the connector that raised the flag.

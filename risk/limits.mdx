@@ -1,0 +1,50 @@
+---
+title: "Risk limits"
+description: "v0.1 hard limits."
+---
+
+## Per-tx and per-day
+
+- Curator per-tx: ≤ \$50,000
+- Curator per-day: ≤ \$150,000
+- IPOR Alpha per-action (once role confirmed): small-notional cap (low four-figures) per action
+
+## Vault caps
+
+- Direct sleeve v0.1: $$50,000 initially, scaling to $$150,000 total pre-audit
+- No scaling past \$150,000 without external review
+
+## Platform concentration
+
+- Non-Direct platform: **≤ 20% NAV** until independent unwind demonstrated
+- Alert at 25% for any platform with routine-ops / withdrawal / NAV dependency
+
+## Protocol concentration
+
+- Configurable per protocol; caps set by risk committee
+- Wrapper-blind aggregation — exposure counts across all platforms
+
+## NAV movement
+
+- `maxDeltaBpsPerHour` per vault
+- Force-NAV path for legitimate large moves (Safe or 2-of-3)
+- Auto-pause on \> 75 bps unexplained delta
+
+## Withdrawal buffer
+
+- Min idle % per vault (configurable, on chain)
+- Redemption-coverage alert threshold
+
+## Leverage
+
+- **Default: prohibited.** Borrow, leverage, and collateralized flows disabled by default.
+- Enable only under explicit vault mandate with risk-committee approval.
+
+## Incident severity levels
+
+| Level | Trigger | Response |
+| --- | --- | --- |
+| SEV-1 | Funds at direct risk, exploit signal, PPS delta \> 75 bps | Auto-pause; on-call paged; incident room opened |
+| SEV-2 | Platform-dependency threshold breach, recompute \> 5 bps | Alert; on-call paged; investigate |
+| SEV-3 | Oracle stale, keeper stale, service degradation | Alert; SRE investigates |
+| SEV-4 | Informational | Log |

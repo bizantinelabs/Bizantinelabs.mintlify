@@ -1,0 +1,31 @@
+---
+title: "Euler — Passive supply"
+sidebarTitle: "Passive supply"
+description: "ERC-4626 supply into an approved EVault, no borrow."
+---
+
+<Info>
+  **Status:** `SHADOW MODE` in v0.1 → `PILOT` in Phase 1.5.
+</Info>
+
+## Position shape
+
+Passive supply is an ERC-4626 deposit into an approved `EVault`. `NormalizedPosition.type = EULER_SUPPLY`. Value = `convertToAssets(shares)`.
+
+## Controls
+
+- Approved EVaults allowlist
+- Max protocol allocation (aggregated across every wrapper)
+- Max utilization
+- Minimum withdraw liquidity
+- Oracle deviation bound
+- Max slippage / max unwind loss
+
+## Fork tests
+
+Supply → accrue → withdraw; liquidity shortage; oracle deviation; unauthorized EVault (must revert).
+
+## Emergency
+
+- `emergencyExit()` — attempts full withdraw within available liquidity
+- Cross-platform propagation on adapter-target exploit signal

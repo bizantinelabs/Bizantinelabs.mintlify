@@ -1,0 +1,31 @@
+---
+title: "Euler — Overview"
+sidebarTitle: "Overview"
+description: "Euler V2 — EVK vaults + EVC. Borrow disabled by default."
+---
+
+<Info>
+  **Status:** Passive supply — `SHADOW MODE` in v0.1, `PILOT` in Phase 1.5. Collateralized borrow and leverage require an explicit vault mandate; disabled by default.
+</Info>
+
+## Architecture
+
+Euler V2 =
+
+- **EVK** (Euler Vault Kit) — ERC-4626 `EVault`s
+- **EVC** (Ethereum Vault Connector) — controller / collateral enablement, sub-accounts (256 per address via address XOR), batching
+
+## Supported modes
+
+| Mode | v0.1 support |
+| --- | --- |
+| Passive supply | Read \+ Level-2 shadow |
+| Approved collateral (enable / disable) | Level-2 (write disabled) |
+| Borrow / repay | **Disabled** unless vault mandate authorizes |
+| Leveraged loop | **Disabled** unless vault mandate authorizes |
+| Euler Earn (curated) | Read |
+| Direct EVK | Read |
+
+## Global default
+
+**Borrowing and leverage are prohibited unless the vault mandate authorizes.** Enforced by adapter defaults and Fordefi policies. See [Risk controls](/strategies/euler/risk-controls).

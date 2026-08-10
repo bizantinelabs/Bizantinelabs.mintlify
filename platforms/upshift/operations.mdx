@@ -1,0 +1,27 @@
+---
+title: "Upshift — Operations"
+sidebarTitle: "Operations"
+description: "NAV, deposits, redemptions, and strategy execution on Upshift."
+---
+
+## NAV workflow
+
+Upshift uses multi-oracle NAV validation with a **Max Percentage Change** ceiling on the share/asset ratio per update. Bizantine's independent recompute must agree with the on-chain share/asset ratio within tolerance (default 5 bps) before any action.
+
+## Deposits and redemptions
+
+- Deposits: standard ERC-4626 flow into the Upshift vault
+- Redemptions: served from the withdrawal liquidity buffer; deeper redemptions require Vault Operator processing
+
+## Strategy execution
+
+Subaccount Manager / Curator initiates strategy actions **within** the August policy engine allowlist. Every transaction from the subaccount is filtered by protocol / token / function-selector.
+
+## Emergency procedures
+
+- Multisig **pause** deposits and withdrawals
+- Multisig **pull to vault** — pulls all strategy funds back to the vault
+
+## Level 2 build (planned)
+
+Once a Bizantine Upshift vault address is registered, the connector will construct calldata for allowlisted August actions, simulate against fork state, and surface the required signer (Curator via Fordefi with policy encoding the August allowlist).

@@ -1,0 +1,43 @@
+---
+title: "Lagoon — Overview"
+sidebarTitle: "Overview"
+description: "Hopper Labs. ERC-7540 vault + silo + Safe/Zodiac curator."
+---
+
+<Info>
+  **Status:** `READ-ONLY` scaffold. `NO_ADDRESS` — no Bizantine Lagoon vault known to exist yet.
+</Info>
+
+## Architecture
+
+A Lagoon vault is an **ERC-7540** async vault \+ a **silo contract** (holds pending deposits and redemptions). Vaults are deployed via a permissionless Vault Factory (18\+ EVM chains).
+
+Curation is un-opinionated: typically a **Safe \+ Zodiac Role Modifier** or MPC.
+
+## Two-step settlement
+
+Lagoon prevents unilateral price control:
+
+1. **Valuation provider** proposes NAV
+2. **Curator** verifies and settles
+
+Neither acts alone. Forward pricing at settlement.
+
+## Roles
+
+| Role | Function |
+| --- | --- |
+| Valuation provider | Proposes NAV |
+| Curator | Verifies and settles; strategy management |
+| Whitelist manager | Controls depositor allowlist |
+| Vault admin | Configuration, fees |
+
+## Continuity read
+
+If Bizantine holds Curator (Safe/Zodiac) **and** can run or replace the valuation provider, Bizantine can independently value and settle. If valuation is a Lagoon-run service, NAV depends on Lagoon.
+
+## Sources
+
+- docs.lagoon.finance (architecture, terminology, vault-architecture)
+- lagoon.finance/blog
+- Nethermind V1→V5 audit notes

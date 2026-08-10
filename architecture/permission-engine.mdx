@@ -1,0 +1,44 @@
+---
+title: "Permission engine"
+description: "Unknown = Blocked. Every precondition verified before EXECUTABLE."
+---
+
+The permission engine is the load-bearing safety mechanism. It answers: **given a proposed action, is it safe to execute right now?** Its default answer is `BLOCKED`.
+
+## Determination states
+
+| State | Meaning |
+| --- | --- |
+| `EXECUTABLE` | Every precondition satisfied. Action may be sent. |
+| `REQ_SAFE` | Requires Safe multisig |
+| `REQ_FORDEFI` | Requires Fordefi policy-scoped key |
+| `REQ_PLATFORM_APPROVAL` | Requires external platform action (whitelist, role assignment, etc.) |
+| `REQ_TIMELOCK` | Requires timelock delay |
+| `PAUSED` | Contract or platform paused |
+| `UNSUPPORTED` | Platform does not permit this action for this role |
+| `UNKNOWN` | Any precondition is unresolved. Treated as `BLOCKED`. |
+
+## Precondition set
+
+An action returns `EXECUTABLE` only when all of the following resolve positively:
+
+1. **Role holder read from chain** equals a Bizantine-controlled address
+2. **Fordefi policy** permits the exact call (target \+ selector \+ token \+ notional)
+3. **Platform allowlist** covers target \+ selector \+ token
+4. **No blocking timelock** applies (or the timelock has elapsed)
+5. **Not paused** at contract or platform level
+6. **NAV freshness** within the configured window
+7. **Transaction simulates** successfully
+8. **Independent unwind** path exists and is on-chain-executable by Bizantine
+
+Any check returning `UNKNOWN` → `BLOCKED`.
+
+## Enforcement rule
+
+<Warning>
+  Documentation cannot promote an action to `EXECUTABLE`. The role holder must be read from the deployed contract. If the address of the vault is unknown, or the role holder cannot be read, the engine returns `UNKNOWN` and the action is blocked.
+</Warning>
+
+## Fuzz property
+
+A fuzz test drives the engine with random combinations of role holders, timelock states, pause states, and NAV freshness values. For any input where at least one field is `UNKNOWN` or does not equal the expected Bizantine-controlled value, the engine must return a non-`EXECUTABLE` result. See [Testing](/security/testing).

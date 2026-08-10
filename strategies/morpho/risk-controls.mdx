@@ -1,0 +1,40 @@
+---
+title: "Morpho — Risk controls"
+sidebarTitle: "Risk controls"
+description: "On-chain and off-chain risk controls for Morpho positions."
+---
+
+## On-chain controls
+
+- Approved market IDs allowlist per adapter
+- Loan / collateral / oracle / IRM allowlists
+- Max LLTV
+- Max allocation per market
+- Max allocation per protocol (across every wrapper)
+- Max utilization
+- Minimum withdraw liquidity
+- Slippage / deadline enforcement on entry and exit
+- Pause coverage
+
+## Off-chain monitored
+
+- Cross-platform aggregate Morpho exposure (see [Risk engine](/architecture/risk-engine))
+- Oracle freshness \+ deviation
+- Bad-debt signal
+- Curator-timelock monitoring
+- Supply / withdraw queue configuration changes
+- Cap utilization
+
+## Alerts
+
+- Oracle deviation beyond bound
+- Curator initiated timelocked change
+- Cap raised without prior notice
+- Bad-debt detected in any allocated market
+- Utilization above threshold with insufficient withdraw liquidity
+
+## Emergency
+
+- Adapter `emergencyExit()` — attempts full withdraw within available liquidity
+- Hypernative sentinel auto-pauses on adapter-target exploit signal
+- Cross-platform propagation: if the same Morpho market is flagged anywhere, every Bizantine vault exposed to it pauses
